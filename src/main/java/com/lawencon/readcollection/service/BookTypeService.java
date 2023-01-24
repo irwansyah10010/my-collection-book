@@ -1,5 +1,6 @@
 package com.lawencon.readcollection.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,13 +10,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.readcollection.constant.Message;
+import com.lawencon.readcollection.dao.BookDao;
 import com.lawencon.readcollection.dao.BookTypeDao;
+import com.lawencon.readcollection.dao.ReadBookDao;
 import com.lawencon.readcollection.dto.BaseInsertResDto;
 import com.lawencon.readcollection.dto.BaseResListDto;
 import com.lawencon.readcollection.dto.BaseResSingleDto;
 import com.lawencon.readcollection.dto.BaseUpdateAndDeleteResDto;
+import com.lawencon.readcollection.dto.booktype.BookTypeDeleteReqDto;
 import com.lawencon.readcollection.dto.booktype.BookTypeInsertReqDto;
+import com.lawencon.readcollection.dto.booktype.BookTypeResDataDto;
 import com.lawencon.readcollection.dto.booktype.BookTypeUpdateReqDto;
+import com.lawencon.readcollection.model.Book;
 import com.lawencon.readcollection.model.BookType;
 
 @Service
@@ -23,6 +29,12 @@ public class BookTypeService {
     
     @Autowired
     private BookTypeDao bookTypeDao;
+
+    @Autowired
+    private BookDao bookDao;
+
+    @Autowired
+    private ReadBookDao readBookDao;
 
     @Transactional(rollbackOn = Exception.class)
     public BaseInsertResDto save(BookTypeInsertReqDto bookTypeReqDto){
@@ -69,22 +81,68 @@ public class BookTypeService {
         return baseUpdateResDto;
     }
 
-    public BaseResListDto<BookType> getAll(){
-        BaseResListDto<BookType> baseResListDto = new BaseResListDto<>();
+    @Transactional(rollbackOn = Exception.class)
+    public BaseUpdateAndDeleteResDto delete(BookTypeDeleteReqDto bookTypeDeleteReqDto){
+        BaseUpdateAndDeleteResDto baseDeleteResDto = new BaseUpdateAndDeleteResDto();
+        BookType bookType = bookTypeDao.findById(BookType.class, bookTypeDeleteReqDto.getId());
+
+        if(bookType != null){
+
+            List<Book> books = bookDao.getByBookTypeId(bookTypeDeleteReqDto.getId());
+
+            // delete read book, book and book type
+            books.forEach(book ->{
+                readBookDao.delete("tb_read_book", "book_id", book.getId());
+            });
+
+            bookDao.delete("tb_book", "book_type_id", bookTypeDeleteReqDto.getId());
+
+            Boolean isDeleteBookType = bookTypeDao.delete("tb_book_type", "id", bookTypeDeleteReqDto.getId());
+
+            if(isDeleteBookType){
+                baseDeleteResDto.setMessage(Message.SUCCESS_DELETE.getMessage()+"(data relation a book, deleted)");    
+            }
+            
+            
+            
+        }else{
+            baseDeleteResDto.setMessage(Message.FAILED_DELETE.getMessage());
+        }
+
+        return baseDeleteResDto;
+    }
+
+    public BaseResListDto<BookTypeResDataDto> getAll(){
+        BaseResListDto<BookTypeResDataDto> baseResListDto = new BaseResListDto<>();
 
         String tableName = "tb_book_type";
 
         List<BookType> bookTypes = bookTypeDao.getAll(tableName, BookType.class);
         Integer countOfBookType = bookTypeDao.getCountOfData(tableName);
 
-        baseResListDto.setData(bookTypes);
+        List<BookTypeResDataDto> bookTypeResDataDtos = new ArrayList<>();
+        bookTypes.forEach(bookType->{
+            BookTypeResDataDto bookTypeResDataDto = new BookTypeResDataDto();
+
+            bookTypeResDataDto.setId(bookType.getId());
+            bookTypeResDataDto.setBookTypeCode(bookType.getBookTypeCode());
+            bookTypeResDataDto.setBookTypeName(bookType.getBookTypeName());
+            
+            List<Book> books = bookDao.getByBookTypeId(bookType.getId());
+
+            bookTypeResDataDto.setBooks(books);
+
+            bookTypeResDataDtos.add(bookTypeResDataDto);
+        });
+
+        baseResListDto.setData(bookTypeResDataDtos);
         baseResListDto.setCountOfData(countOfBookType);
 
         return baseResListDto;
     }
 
-    public BaseResListDto<BookType> getAll(Object search){
-        BaseResListDto<BookType> baseResListDto = new BaseResListDto<>();
+    public BaseResListDto<BookTypeResDataDto> getAll(Object search){
+        BaseResListDto<BookTypeResDataDto> baseResListDto = new BaseResListDto<>();
 
         String tableName = "tb_book_type";
 
@@ -95,23 +153,46 @@ public class BookTypeService {
                 || bookType.getBookTypeName().equals(search))
         .collect(Collectors.toList());
 
-        baseResListDto.setData(bookTypes);
+        List<BookTypeResDataDto> bookTypeResDataDtos = new ArrayList<>();
+        bookTypes.forEach(bookType->{
+            BookTypeResDataDto bookTypeResDataDto = new BookTypeResDataDto();
 
+            bookTypeResDataDto.setId(bookType.getId());
+            bookTypeResDataDto.setBookTypeCode(bookType.getBookTypeCode());
+            bookTypeResDataDto.setBookTypeName(bookType.getBookTypeName());
+            
+            List<Book> books = bookDao.getByBookTypeId(bookType.getId());
+
+            bookTypeResDataDto.setBooks(books);
+
+            bookTypeResDataDtos.add(bookTypeResDataDto);
+        });
+
+        baseResListDto.setData(bookTypeResDataDtos);
         baseResListDto.setCountOfData(bookTypes.size());
 
         return baseResListDto;
     }
 
-    public BaseResSingleDto<BookType> getById(String id){
-        BaseResSingleDto<BookType> baseResSingleDto = new BaseResSingleDto<>();
+    public BaseResSingleDto<BookTypeResDataDto> getById(String id){
+        BaseResSingleDto<BookTypeResDataDto> baseResSingleDto = new BaseResSingleDto<>();
 
         BookType bookType = bookTypeDao.findById(BookType.class, id);
 
         if(bookType != null){
-            baseResSingleDto.setData(bookType);
+            BookTypeResDataDto bookTypeResDataDto = new BookTypeResDataDto();
+            bookTypeResDataDto.setId(bookType.getId());
+            bookTypeResDataDto.setId(bookType.getId());
+            bookTypeResDataDto.setBookTypeCode(bookType.getBookTypeCode());
+            bookTypeResDataDto.setBookTypeName(bookType.getBookTypeName());
+            
+            List<Book> books = bookDao.getByBookTypeId(bookType.getId());
+
+            bookTypeResDataDto.setBooks(books);
+
+            baseResSingleDto.setData(bookTypeResDataDto);
         }
 
         return baseResSingleDto;
     }
-    
 }

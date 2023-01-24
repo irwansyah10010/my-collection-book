@@ -30,13 +30,20 @@ public abstract class BaseDao {
     public Boolean delete(String tableName,String columnName,Object value){
         StringBuilder sql = new StringBuilder();
 
-        sql.append("DELETE from ")
+        sql.append("DELETE FROM ")
         .append(tableName).append(" ")
         .append("WHERE ")
-        .append(columnName).append("=").append(value);
+        .append(columnName).append(" = ").append(":value");
 
-        int delete = getEM().createNativeQuery(sql.toString())
-        .executeUpdate();
+        int delete = 0;
+
+        try {
+            delete = getEM().createNativeQuery(sql.toString())
+            .setParameter("value", value)
+            .executeUpdate();
+        } catch (Exception e) {
+            
+        }
 
         return delete > 0;
     }

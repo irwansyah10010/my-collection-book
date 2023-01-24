@@ -27,14 +27,14 @@ output:
 {
   "data": [
     {
-      "id": "id",
-      "bookTypeCode": "code",
-      "bookTypeName": "name"
+      "id": "string",
+      "bookTypeCode": "string",
+      "bookTypeName": "string"
     },
     {
-      "id": "id2",
-      "bookTypeCode": "code2",
-      "bookTypeName": "name2"
+      "id": "string",
+      "bookTypeCode": "string",
+      "bookTypeName": "string"
     }
   ],
   "countOfData": 2
@@ -42,15 +42,15 @@ output:
 ```
 
 #### getById(id:String)
-url: `http://localhost:8080/book-types/{id}/id`*({id}: diisi dengan id yang dicari*) dengan method: `GET`
+url: `http://localhost:8080/book-types/{id}/id`*({id}: diisi dengan id yang dicari)* dengan method: `GET`
 
 output:
 ```json
 {
   "data":{
-    "id": "id",
-      "bookTypeCode": "code",
-      "bookTypeName": "name"
+    "id": "string",
+    "bookTypeCode": "string",
+    "bookTypeName": "string"
   }
 }
 ```
@@ -61,16 +61,16 @@ url: `http://localhost:8080/book-types/` dengan method: `POST`
 input(request body):
  ```json
 {
-  "bookTypeCode":"code",
-  "bookTypeName":"name"
+  "bookTypeCode":"string",
+  "bookTypeName":"string"
 }
  ```
 
 output(data tersimpan):
 ```json
 {
-  "id": "id",
-  "message":"message"
+  "id": "string",
+  "message":"string"
 }
 ```
 
@@ -80,16 +80,15 @@ url: `http://localhost:8080/book-types/` dengan method: `PUT`
 input(request body):
  ```json
 {
-  "id":"id",
-  "bookTypeName":"name"
+  "id":"string",
+  "bookTypeName":"string"
 }
  ```
  
 output:
-
 ```json
 {
-  "message":"message"
+  "message":"string"
 }
 ```
 
@@ -100,27 +99,27 @@ buku yang tersedia
 url: `http://localhost:8080/book-types/` dengan method: `GET`
 
 output:
-
 ```json
 {
   "data": [
-   {
-      "id": "id",
-      "issbn": "issbn",
-      "title": "title",
-      "synopsis": "synopsis",
-      "numberOfPage": number,
-      "price": price,
-      "status": "status",
-      "bookType": {
-        "id": "id",
-        "bookTypeCode": "code",
-        "bookTypeName": "name"
-      },
-      "publisher": "publisher",
-      "authorName": "author"
-  },
-  "countOfData": count
+    {
+        "id": "string",
+        "issbn": "string",
+        "title": "string",
+        "synopsis": "string",
+        "numberOfPage": 99,
+        "price": 1000.00,
+        "status": "string",
+        "bookType": {
+          "id": "string",
+          "bookTypeCode": "string",
+          "bookTypeName": "string"
+        },
+        "publisher": "string",
+        "authorName": "string"
+    }
+  ],
+  "countOfData": 1
 }
 ```
 #### getById(id:String)
@@ -130,20 +129,20 @@ output:
 ```json
 {
   "data":{
-      "id": "id",
-      "issbn": "issbn",
-      "title": "title",
-      "synopsis": "synopsis",
-      "numberOfPage": number,
-      "price": price,
-      "status": "status",
+      "id": "string",
+      "issbn": "string",
+      "title": "string",
+      "synopsis": "string",
+      "numberOfPage": 13,
+      "price": 99.00,
+      "status": "string",
       "bookType": {
-        "id": "id",
-        "bookTypeCode": "code",
-        "bookTypeName": "name"
+        "id": "string",
+        "bookTypeCode": "string",
+        "bookTypeName": "string"
       },
-      "publisher": "publisher",
-      "authorName": "author"
+      "publisher": "string",
+      "authorName": "string"
   },
 }
 ```
@@ -154,65 +153,65 @@ url: `http://localhost:8080/books/` dengan method: `POST`
 input(request body):
 ```json
 {
-    "issbn":"issbn",
-    "title":"title",
-    "numberOfPage":number,
-    "synopsis":"synopsis",
+    "issbn":"string",
+    "title":"string",
+    "numberOfPage":12,
+    "synopsis":"string",
     "price":0,
     
-    "publisher":"publisher",
-    "authorName":"author",
-    "bookTypeId":"typeId"
+    "publisher":"string",
+    "authorName":"string",
+    "bookTypeId":"string"
 }
 ```
 
 output:
 ```json
 {
-  "id": "id",
-  "message":"message"
+  "id": "string",
+  "message":"string"
 }
 ```
 
 #### update(entity:Object Book Type)
-url: `http://localhost:8080/book-types/` dengan method: `PUT`
+url: `http://localhost:8080/books/` dengan method: `PUT`
 
 input(request body):
  ```json
 {
-  "id":"id",
-  "title":"title",
-  "numberOfPage":number,
-  "synopsis":"synopsis",
-  "price":0,
+  "id":"string",
+  "title":"string",
+  "numberOfPage":99,
+  "synopsis":"string",
+  "price":99.0,
     
-  "publisher":"publisher",
-  "authorName":"author"
+  "publisher":"string",
+  "authorName":"string"
 }
  ```
  
 output:
 ```json
 {
-  "message":"message"
+  "message":"string"
 }
 ```
 
 #### update status(entity:Object Book Type)
-url: `http://localhost:8080/book-types/update-status/` dengan method: `PUT`
+url: `http://localhost:8080/books/update-status/` dengan method: `PUT`
 
 input(request body):
  ```json
 {
-  "id":"id",
-  "status":"status"
+  "id":"string",
+  "status":"string"
 }
  ```
  
 output:
 ```json
 {
-  "message":"message"
+  "message":"string"
 }
 ```
 
@@ -227,21 +226,21 @@ output:
 {
   "data": [
     {
-      "id": "id",
-      "pageOfRead": 0,
-      "dateOfRead": "dateOfRead",
+      "id": "string",
+      "pageOfRead": 99,
+      "dateOfRead": "timestamp",
       "book": {
-        "id": "id",
-        "issbn": "issbn",
-        "title": "title",
-        "synopsis": "synopsis",
-        "numberOfPage": number,
-        "price": 0,
-        "status": "status",
+        "id": "string",
+        "issbn": "string",
+        "title": "string",
+        "synopsis": "string",
+        "numberOfPage": 99,
+        "price": 99.00,
+        "status": "string",
         "bookType": {
-          "id": "id",
-          "bookTypeCode": "code",
-          "bookTypeName": "name"
+          "id": "string",
+          "bookTypeCode": "string",
+          "bookTypeName": "string"
         },
         "publisher": "publisher",
         "authorName": "author"
@@ -258,26 +257,26 @@ url: `http://localhost:8080/read-books/{id}/id`*({id}: diisi dengan id yang dica
 output:
 ```json
 {
-  data:{
-      "id": "id",
+  "data":{
+      "id": "string",
       "pageOfRead": 0,
-      "dateOfRead": "dateOfRead",
+      "dateOfRead": "string",
       "book": {
-        "id": "id",
-        "issbn": "issbn",
-        "title": "title",
-        "synopsis": "synopsis",
-        "numberOfPage": number,
+        "id": "string",
+        "issbn": "string",
+        "title": "string",
+        "synopsis": "string",
+        "numberOfPage": 99,
         "price": 0,
-        "status": "status",
+        "status": "string",
         "bookType": {
-          "id": "id",
-          "bookTypeCode": "code",
+          "id": "string",
+          "bookTypeCode": "string",
           "bookTypeName": "name"
         },
-        "publisher": "publisher",
-        "authorName": "author"
-   }
+        "publisher": "string",
+        "authorName": "string"
+  }
 }
 ```
 
@@ -288,16 +287,16 @@ input:
 ```json
 {
     "pageOfRead":0,
-    "status":"status",
+    "status":"string",
 
-    "bookId":"id"
+    "bookId":"string"
 }
 ```
 
 output:
 ```json
 {
-  "id": "id",
-  "message":"message"
+  "id": "string",
+  "message":"string"
 }
 ```
