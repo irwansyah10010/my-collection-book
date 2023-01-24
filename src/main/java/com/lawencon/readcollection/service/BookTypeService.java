@@ -1,6 +1,7 @@
 package com.lawencon.readcollection.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -78,6 +79,25 @@ public class BookTypeService {
 
         baseResListDto.setData(bookTypes);
         baseResListDto.setCountOfData(countOfBookType);
+
+        return baseResListDto;
+    }
+
+    public BaseResListDto<BookType> getAll(Object search){
+        BaseResListDto<BookType> baseResListDto = new BaseResListDto<>();
+
+        String tableName = "tb_book_type";
+
+        List<BookType> bookTypes = bookTypeDao.getAll(tableName, BookType.class);
+
+        bookTypes =  bookTypes.stream()
+        .filter(bookType-> bookType.getBookTypeCode().equals(search) 
+                || bookType.getBookTypeName().equals(search))
+        .collect(Collectors.toList());
+
+        baseResListDto.setData(bookTypes);
+
+        baseResListDto.setCountOfData(bookTypes.size());
 
         return baseResListDto;
     }

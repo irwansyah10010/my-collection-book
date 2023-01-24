@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.readcollection.dto.BaseInsertResDto;
@@ -28,8 +29,14 @@ public class BookTypeController {
     private BookTypeService bookTypeService;
 
     @GetMapping
-    public ResponseEntity<BaseResListDto<BookType>> getAll(){
-        BaseResListDto<BookType> baseResListDto = bookTypeService.getAll();
+    public ResponseEntity<BaseResListDto<BookType>> getAll(@RequestParam(value="search",required = false,defaultValue = "-") Object search){
+        BaseResListDto<BookType> baseResListDto = null;
+
+        if(search.equals("-")){
+            baseResListDto = bookTypeService.getAll();
+        }else{
+            baseResListDto = bookTypeService.getAll(search);
+        }
 
         return new ResponseEntity<>(baseResListDto, HttpStatus.OK);
     }

@@ -1,6 +1,8 @@
 package com.lawencon.readcollection.service;
 
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -73,19 +75,33 @@ public class BookService {
 
         if(book != null){
 
-            book.setTitle(bookUpdateReqDto.getTitle());
-            book.setNumberOfPage(bookUpdateReqDto.getNumberOfPage());
-    
-            book.setSynopsis(bookUpdateReqDto.getSynopsis());
-            book.setPrice(bookUpdateReqDto.getPrice());
-            
-            book.setPublisher(bookUpdateReqDto.getPublisher());
-            book.setAuthorName(bookUpdateReqDto.getAuthorName());
+            if(bookUpdateReqDto.getTitle() != null){
+                book.setTitle(bookUpdateReqDto.getTitle());
+            }
+
+            if(bookUpdateReqDto.getNumberOfPage() != null){
+                book.setNumberOfPage(bookUpdateReqDto.getNumberOfPage());
+            }
+
+            if(bookUpdateReqDto.getNumberOfPage() != null){
+                book.setSynopsis(bookUpdateReqDto.getSynopsis());
+            }
+
+            if(bookUpdateReqDto.getPrice() != null){
+                book.setPrice(bookUpdateReqDto.getPrice());
+            }
+
+            if(bookUpdateReqDto.getPublisher() != null){
+                book.setPublisher(bookUpdateReqDto.getPublisher());
+            }
+
+            if(bookUpdateReqDto.getAuthorName() != null){
+                book.setAuthorName(bookUpdateReqDto.getAuthorName());
+            }
 
             Book bookUpdate = bookDao.update(book);
 
-            if(bookUpdate != null){
-                
+            if(bookUpdate != null){   
                 baseUpdateResDto.setMessage(Message.SUCCESS_UPDATE.getMessage());
             }else{
                 baseUpdateResDto.setMessage(Message.FAILED_UPDATE.getMessage());
@@ -137,6 +153,27 @@ public class BookService {
 
         baseResListDto.setData(books);
         baseResListDto.setCountOfData(countOfBook);
+
+        return baseResListDto;
+    }
+
+    public BaseResListDto<Book> getAll(Object search){
+        BaseResListDto<Book> baseResListDto = new BaseResListDto<>();
+
+        String tableName = "tb_book";
+
+        List<Book> books = bookDao.getAll(tableName, Book.class);
+
+        books = books.stream()
+                .filter(book -> book.getIssbn().equals(search) 
+                || book.getTitle().equals(search)
+                || book.getPublisher().equals(search)
+                || book.getAuthorName().equals(search)
+                || book.getIssbn().equals(search))
+                .collect(Collectors.toList());
+
+        baseResListDto.setData(books);
+        baseResListDto.setCountOfData(books.size());
 
         return baseResListDto;
     }

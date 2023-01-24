@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lawencon.readcollection.dto.BaseInsertResDto;
@@ -29,8 +30,15 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping
-    public ResponseEntity<BaseResListDto<Book>> getAll(){
-        BaseResListDto<Book> baseResListDto = bookService.getAll();
+    public ResponseEntity<BaseResListDto<Book>> getAll(@RequestParam(value="search",required = false,defaultValue = "-") Object search){
+        BaseResListDto<Book> baseResListDto = null;
+
+        if(search.equals("-")){
+            baseResListDto = bookService.getAll();
+        }else{
+            baseResListDto = bookService.getAll(search);
+        }
+
 
         return new ResponseEntity<>(baseResListDto, HttpStatus.OK);
     }
