@@ -12,7 +12,7 @@ import com.lawencon.readcollection.dao.BookTypeDao;
 import com.lawencon.readcollection.dto.BaseInsertResDto;
 import com.lawencon.readcollection.dto.BaseResListDto;
 import com.lawencon.readcollection.dto.BaseResSingleDto;
-import com.lawencon.readcollection.dto.BaseUpdateResDto;
+import com.lawencon.readcollection.dto.BaseUpdateAndDeleteResDto;
 import com.lawencon.readcollection.dto.booktype.BookTypeInsertReqDto;
 import com.lawencon.readcollection.dto.booktype.BookTypeUpdateReqDto;
 import com.lawencon.readcollection.model.BookType;
@@ -45,8 +45,8 @@ public class BookTypeService {
     }
 
     @Transactional(rollbackOn = Exception.class)
-    public BaseUpdateResDto update(BookTypeUpdateReqDto bookTypeUpdateReqDto){
-        BaseUpdateResDto baseUpdateResDto = new BaseUpdateResDto();
+    public BaseUpdateAndDeleteResDto update(BookTypeUpdateReqDto bookTypeUpdateReqDto){
+        BaseUpdateAndDeleteResDto baseUpdateResDto = new BaseUpdateAndDeleteResDto();
 
         BookType bookType = bookTypeDao.findById(BookType.class, bookTypeUpdateReqDto.getId());
 
@@ -57,7 +57,6 @@ public class BookTypeService {
             BookType bookTypeUpdate = bookTypeDao.update(bookType);
 
             if(bookTypeUpdate != null){
-                baseUpdateResDto.setVersion(0);
                 baseUpdateResDto.setMessage(Message.SUCCESS_UPDATE.getMessage());
             }else{
                 baseUpdateResDto.setMessage(Message.FAILED_UPDATE.getMessage());
@@ -72,9 +71,13 @@ public class BookTypeService {
     public BaseResListDto<BookType> getAll(){
         BaseResListDto<BookType> baseResListDto = new BaseResListDto<>();
 
-        List<BookType> bookTypes = bookTypeDao.getAll("tb_book_type", BookType.class);
+        String tableName = "tb_book_type";
+
+        List<BookType> bookTypes = bookTypeDao.getAll(tableName, BookType.class);
+        Integer countOfBookType = bookTypeDao.getCountOfData(tableName);
 
         baseResListDto.setData(bookTypes);
+        baseResListDto.setCountOfData(countOfBookType);
 
         return baseResListDto;
     }

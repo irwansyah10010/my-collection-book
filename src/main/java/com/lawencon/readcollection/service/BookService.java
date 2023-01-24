@@ -13,7 +13,7 @@ import com.lawencon.readcollection.dao.BookTypeDao;
 import com.lawencon.readcollection.dto.BaseInsertResDto;
 import com.lawencon.readcollection.dto.BaseResListDto;
 import com.lawencon.readcollection.dto.BaseResSingleDto;
-import com.lawencon.readcollection.dto.BaseUpdateResDto;
+import com.lawencon.readcollection.dto.BaseUpdateAndDeleteResDto;
 import com.lawencon.readcollection.dto.book.BookInsertReqDto;
 import com.lawencon.readcollection.dto.book.BookUpdateReqDto;
 import com.lawencon.readcollection.dto.book.BookUpdateStatusReqDto;
@@ -66,8 +66,8 @@ public class BookService {
     }
 
     @Transactional(rollbackOn = Exception.class)
-    public BaseUpdateResDto update(BookUpdateReqDto bookUpdateReqDto){
-        BaseUpdateResDto baseUpdateResDto = new BaseUpdateResDto();
+    public BaseUpdateAndDeleteResDto update(BookUpdateReqDto bookUpdateReqDto){
+        BaseUpdateAndDeleteResDto baseUpdateResDto = new BaseUpdateAndDeleteResDto();
 
         Book book = bookDao.findById(Book.class, bookUpdateReqDto.getId());
 
@@ -85,7 +85,7 @@ public class BookService {
             Book bookUpdate = bookDao.update(book);
 
             if(bookUpdate != null){
-                baseUpdateResDto.setVersion(0);
+                
                 baseUpdateResDto.setMessage(Message.SUCCESS_UPDATE.getMessage());
             }else{
                 baseUpdateResDto.setMessage(Message.FAILED_UPDATE.getMessage());
@@ -98,8 +98,8 @@ public class BookService {
     }
 
     @Transactional(rollbackOn = Exception.class)
-    public BaseUpdateResDto updateStatus(BookUpdateStatusReqDto bookUpdateStatusReqDto){
-        BaseUpdateResDto baseUpdateResDto = new BaseUpdateResDto();
+    public BaseUpdateAndDeleteResDto updateStatus(BookUpdateStatusReqDto bookUpdateStatusReqDto){
+        BaseUpdateAndDeleteResDto baseUpdateResDto = new BaseUpdateAndDeleteResDto();
 
         Book book = bookDao.findById(Book.class, bookUpdateStatusReqDto.getId());
 
@@ -110,7 +110,6 @@ public class BookService {
             Book bookUpdate = bookDao.update(book);
 
             if(bookUpdate != null){
-                baseUpdateResDto.setVersion(0);
                 baseUpdateResDto.setMessage(Message.SUCCESS_UPDATE.getMessage());
             }else{
                 baseUpdateResDto.setMessage(Message.FAILED_UPDATE.getMessage());
@@ -122,12 +121,22 @@ public class BookService {
         return baseUpdateResDto;
     }
 
+    public BaseUpdateAndDeleteResDto deleteById(String id){
+        BaseUpdateAndDeleteResDto baseUpdateResDto = new BaseUpdateAndDeleteResDto();
+
+        return baseUpdateResDto;
+    }
+
     public BaseResListDto<Book> getAll(){
         BaseResListDto<Book> baseResListDto = new BaseResListDto<>();
 
-        List<Book> books = bookDao.getAll("tb_book", Book.class);
+        String tableName = "tb_book";
+
+        List<Book> books = bookDao.getAll(tableName, Book.class);
+        Integer countOfBook = bookDao.getCountOfData(tableName);
 
         baseResListDto.setData(books);
+        baseResListDto.setCountOfData(countOfBook);
 
         return baseResListDto;
     }
@@ -143,4 +152,5 @@ public class BookService {
 
         return baseResSingleDto;
     }
+    
 }

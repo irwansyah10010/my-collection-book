@@ -55,9 +55,9 @@ public class Book {
     private String authorName;
 
 
-    @Transient
-    @OneToMany
-    private List<ReadBook> readBooks = new ArrayList<>();
+    // @Transient
+    // @OneToMany
+    // private List<ReadBook> readBooks = new ArrayList<>();
 
     public String getId() {
         return id;
@@ -139,16 +139,12 @@ public class Book {
         this.authorName = authorName;
     }
 
-    public List<ReadBook> getReadBooks() {
-        return readBooks;
-    }
+    // public List<ReadBook> getReadBooks() {
+    //     return readBooks;
+    // }
 
-    public void setReadBooks(List<ReadBook> readBooks) {
-        this.readBooks = readBooks;
-    }
-
-    
-    
-
+    // public void setReadBooks(List<ReadBook> readBooks) {
+    //     this.readBooks = readBooks;
+    // }
 
 }

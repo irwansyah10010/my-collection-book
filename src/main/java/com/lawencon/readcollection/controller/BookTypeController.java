@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.readcollection.dto.BaseInsertResDto;
 import com.lawencon.readcollection.dto.BaseResListDto;
 import com.lawencon.readcollection.dto.BaseResSingleDto;
-import com.lawencon.readcollection.dto.BaseUpdateResDto;
+import com.lawencon.readcollection.dto.BaseUpdateAndDeleteResDto;
 import com.lawencon.readcollection.dto.booktype.BookTypeInsertReqDto;
 import com.lawencon.readcollection.dto.booktype.BookTypeUpdateReqDto;
 import com.lawencon.readcollection.model.BookType;
@@ -50,8 +50,8 @@ public class BookTypeController {
 
 
     @PutMapping
-    public ResponseEntity<BaseUpdateResDto> update(@RequestBody BookTypeUpdateReqDto bookTypeUpdateReqDto){
-        BaseUpdateResDto baseUpdateResDto = bookTypeService.update(bookTypeUpdateReqDto);
+    public ResponseEntity<BaseUpdateAndDeleteResDto> update(@RequestBody BookTypeUpdateReqDto bookTypeUpdateReqDto){
+        BaseUpdateAndDeleteResDto baseUpdateResDto = bookTypeService.update(bookTypeUpdateReqDto);
 
         return new ResponseEntity<>(baseUpdateResDto, HttpStatus.OK);
     }

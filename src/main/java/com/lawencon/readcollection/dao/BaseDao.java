@@ -24,9 +24,21 @@ public abstract class BaseDao {
     public <T> T update(T entity){
         T entityUpdate = getEM().merge(entity);
 
-        getEM().flush();
-
         return entityUpdate;
+    }
+
+    public Boolean delete(String tableName,String columnName,Object value){
+        StringBuilder sql = new StringBuilder();
+
+        sql.append("DELETE from ")
+        .append(tableName).append(" ")
+        .append("WHERE ")
+        .append(columnName).append("=").append(value);
+
+        int delete = getEM().createNativeQuery(sql.toString())
+        .executeUpdate();
+
+        return delete > 0;
     }
 
     public <T> T findById(Class<T> clazz,String id){
@@ -56,5 +68,29 @@ public abstract class BaseDao {
         List<T> lists = getEM().createNativeQuery(sql.toString(),clazz).getResultList();
 
         return lists;
+    }
+    
+    public Integer getCountOfData(String tablename){
+        StringBuilder sql = new StringBuilder();
+
+        sql.append("SELECT count(*) FROM ")
+        .append(tablename);
+
+        Integer countOfData = 0;
+
+
+        Object obj = null;
+
+        try {
+            obj = getEM().createNativeQuery(sql.toString()).getSingleResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if(obj != null){
+            countOfData = Integer.parseInt(obj.toString());
+        }
+
+        return countOfData;
     }
 }

@@ -66,9 +66,12 @@ public class ReadBookService {
     public BaseResListDto<ReadBook> getAll(){
         BaseResListDto<ReadBook> baseResListDto = new BaseResListDto<>();
 
-        List<ReadBook> readBooks = readBookDao.getAll("tb_read_book", ReadBook.class);
+        String tableName = "tb_read_book";
+        List<ReadBook> readBooks = readBookDao.getAll(tableName, ReadBook.class);
+        Integer countOfReadBook = readBookDao.getCountOfData(tableName);
 
         baseResListDto.setData(readBooks);
+        baseResListDto.setCountOfData(countOfReadBook);
 
         return baseResListDto;
     }

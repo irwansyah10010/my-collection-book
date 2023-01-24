@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.lawencon.readcollection.dto.BaseInsertResDto;
 import com.lawencon.readcollection.dto.BaseResListDto;
 import com.lawencon.readcollection.dto.BaseResSingleDto;
-import com.lawencon.readcollection.dto.BaseUpdateResDto;
+import com.lawencon.readcollection.dto.BaseUpdateAndDeleteResDto;
 import com.lawencon.readcollection.dto.book.BookInsertReqDto;
 import com.lawencon.readcollection.dto.book.BookUpdateReqDto;
 import com.lawencon.readcollection.dto.book.BookUpdateStatusReqDto;
@@ -51,15 +51,15 @@ public class BookController {
 
 
     @PutMapping
-    public ResponseEntity<BaseUpdateResDto> update(@RequestBody BookUpdateReqDto bookUpdateReqDto){
-        BaseUpdateResDto baseUpdateResDto = bookService.update(bookUpdateReqDto);
+    public ResponseEntity<BaseUpdateAndDeleteResDto> update(@RequestBody BookUpdateReqDto bookUpdateReqDto){
+        BaseUpdateAndDeleteResDto baseUpdateResDto = bookService.update(bookUpdateReqDto);
 
         return new ResponseEntity<>(baseUpdateResDto, HttpStatus.OK);
     }
 
     @PutMapping("update-status")
-    public ResponseEntity<BaseUpdateResDto> update(@RequestBody BookUpdateStatusReqDto bookUpdateStatusReqDto){
-        BaseUpdateResDto baseUpdateResDto = bookService.updateStatus(bookUpdateStatusReqDto);
+    public ResponseEntity<BaseUpdateAndDeleteResDto> update(@RequestBody BookUpdateStatusReqDto bookUpdateStatusReqDto){
+        BaseUpdateAndDeleteResDto baseUpdateResDto = bookService.updateStatus(bookUpdateStatusReqDto);
 
         return new ResponseEntity<>(baseUpdateResDto, HttpStatus.OK);
     }

@@ -29,9 +29,9 @@ public class BookType {
     @Column(name = "book_type_name",length = 20,nullable = false)
     private String bookTypeName;
 
-    @Transient
-    @OneToMany(mappedBy = "tb_book_type")
-    private List<Book> books = new ArrayList<>();
+    // @Transient
+    // @OneToMany(mappedBy = "tb_book_type")
+    // private List<Book> books = new ArrayList<>();
 
 
     public String getId() {
@@ -59,15 +59,13 @@ public class BookType {
     }
 
 
-    public List<Book> getBooks() {
-        return books;
-    }
+    // public List<Book> getBooks() {
+    //     return books;
+    // }
 
-    public void setBooks(List<Book> books) {
-        this.books = books;
-    }
-
-    
+    // public void setBooks(List<Book> books) {
+    //     this.books = books;
+    // }
 
     
 }
