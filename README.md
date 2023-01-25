@@ -1,25 +1,27 @@
 # **MY COLLECTION BOOK**
 
-Ini adalah Rest API untuk aplikasi koleksi buku yang dimiliki beserta catatan tentang buku seperti buku baru, buku dalam progress pembacaan dan buku yang telah selesai dibaca.
+Ini adalah Rest API untuk sistem koleksi buku yang dimiliki beserta catatan mengenai buku tersebut. Catatan yang dimaksud seperti buku baru, buku dalam proses pembacaan dan buku yang telah selesai dibaca.
 
 ## **Instruksi Penggunaan**
 
-Dalam pembuatan res API dengan java spring boot, membutuhkan JDK versi 11 dan PosgreSQL untuk menjalankannya. Berikut ini adalah langkah-langkahnya:
+Dalam pembuatan rest API dengan java spring boot, membutuhkan JDK versi 11 dan PostgreSQL untuk menjalankannya. Berikut ini adalah langkah-langkah untuk menggunakan API:
 
 ```
   1. Sebelum dijalankan atur bagian username, password dan database(jika ingin diubah) pada application.properties.
   2. Buat database dengan nama yang telah di atur pada application.properties.
-  3. Lalu jalankan aplikasinya (menggunakan java editor), tabel akan dibuat secara otomatis menyesuaikan bentuk model yang dibuat.
-  4. Selanjutnya rest API MY COLLECTION BOOK siap digunakan, untuk detailnya didokumentasikan pada baris selanjutnya.
+  3. Lalu jalankan aplikasinya (menggunakan eclipse atau sejenisnya), tabel akan dibuat secara otomatis menyesuaikan bentuk model yang sudah dibuat.
+  4. Selanjutnya rest API MY COLLECTION BOOK siap digunakan, untuk detailnya didokumentasikan pada bagian selanjutnya.
 ```
 
 ## **Daftar API yang tersedia di MY COLLECTION BOOK**
-
+Sebelum melihat bentuk API nya, saya akan menjelaskan sedikit mengenai alur penggunaannya. Sederhananya sistem ini mencatat semua aktifitas membaca buku(hardcode), lalu buku dapat dikategorikan ke dalam beberapa tipe sesuai keinginan. berikutnya model yang tersedia:
+  - BookType: model untuk menyimpan kategori buku.
+  - Book: model untuk menyimpan buku beserta status dari buku tersebut.
+  - ReadBook: model untuk mencatat aktifitas membaca berdasarkan tanggal dan halaman terakhir yang dibaca.
 
 ### Book Type
-Variasi tipe buku yang tersedia, 
 
-#### getAll()
+#### Get All
 url: `http://localhost:8080/book-types/` dengan method: `GET`
 
 output:
@@ -29,19 +31,17 @@ output:
     {
       "id": "string",
       "bookTypeCode": "string",
-      "bookTypeName": "string"
+      "bookTypeName": "string",
+      "books":[
+      
+      ]
     },
-    {
-      "id": "string",
-      "bookTypeCode": "string",
-      "bookTypeName": "string"
-    }
   ],
   "countOfData": 2
 }
 ```
 
-#### getById(id:String)
+#### Get By Id
 url: `http://localhost:8080/book-types/{id}/id`*({id}: diisi dengan id yang dicari)* dengan method: `GET`
 
 output:
@@ -50,12 +50,14 @@ output:
   "data":{
     "id": "string",
     "bookTypeCode": "string",
-    "bookTypeName": "string"
+    "bookTypeName": "string",
+    "books":[
+    ]
   }
 }
 ```
 
-#### save(entity:Object Book Type)
+#### Save
 url: `http://localhost:8080/book-types/` dengan method: `POST`
 
 input(request body):
@@ -66,7 +68,7 @@ input(request body):
 }
  ```
 
-output(data tersimpan):
+output:
 ```json
 {
   "id": "string",
@@ -74,7 +76,7 @@ output(data tersimpan):
 }
 ```
 
-#### update(entity:Object Book Type)
+#### Update
 url: `http://localhost:8080/book-types/` dengan method: `PUT`
 
 input(request body):
@@ -92,10 +94,27 @@ output:
 }
 ```
 
+#### Delete
+url: `http://localhost:8080/book-types/` dengan method: `DELETE`
+
+input(request body):
+ ```json
+{
+  "id":"string"
+}
+ ```
+ 
+output:
+```json
+{
+  "message":"string"
+}
+```
+
 ### Book
 buku yang tersedia
 
-#### getAll()
+#### Get All
 url: `http://localhost:8080/book-types/` dengan method: `GET`
 
 output:
@@ -106,23 +125,20 @@ output:
         "id": "string",
         "issbn": "string",
         "title": "string",
-        "synopsis": "string",
         "numberOfPage": 99,
-        "price": 1000.00,
         "status": "string",
         "bookType": {
           "id": "string",
           "bookTypeCode": "string",
           "bookTypeName": "string"
         },
-        "publisher": "string",
-        "authorName": "string"
+        "readBooks":[]
     }
   ],
   "countOfData": 1
 }
 ```
-#### getById(id:String)
+#### Get By Id
 url: `http://localhost:8080/books/{id}/id` *({id}: diisi dengan id yang dicari)* dengan method: `GET`
 
 output:
@@ -142,12 +158,14 @@ output:
         "bookTypeName": "string"
       },
       "publisher": "string",
-      "authorName": "string"
+      "authorName": "string",
+      "readBooks":[]
   },
+  
 }
 ```
 
-#### save(entity:Object Book Type)
+#### Save
 url: `http://localhost:8080/books/` dengan method: `POST`
 
 input(request body):
@@ -173,7 +191,7 @@ output:
 }
 ```
 
-#### update(entity:Object Book Type)
+#### Update
 url: `http://localhost:8080/books/` dengan method: `PUT`
 
 input(request body):
@@ -197,7 +215,7 @@ output:
 }
 ```
 
-#### update status(entity:Object Book Type)
+#### update status
 url: `http://localhost:8080/books/update-status/` dengan method: `PUT`
 
 input(request body):
@@ -218,7 +236,7 @@ output:
 ### Read Book
 Catatan buku yang dibaca
 
-#### getAll()
+#### Get All
 url: `http://localhost:8080/read-books/` dengan method: `GET`
 
 output:
@@ -251,7 +269,7 @@ output:
 }
 ```
 
-#### getById(id:String)
+#### Get By Id
 url: `http://localhost:8080/read-books/{id}/id`*({id}: diisi dengan id yang dicari)* dengan method: `GET`
 
 output:
@@ -280,7 +298,7 @@ output:
 }
 ```
 
-#### save(entity:Object Book Type)
+#### Save
 url: `http://localhost:8080/read-books/` dengan method: `POST`
 
 input:
