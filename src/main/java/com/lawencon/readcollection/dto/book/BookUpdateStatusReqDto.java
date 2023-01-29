@@ -7,8 +7,8 @@ public class BookUpdateStatusReqDto {
     @NotNull(message = "id is must required")
     private String id;
 
-    @NotNull(message = "status is must required")
-    private String status;
+    @NotNull(message = "status code is must required")
+    private String statusCode;
 
     public String getId() {
         return id;
@@ -18,14 +18,15 @@ public class BookUpdateStatusReqDto {
         this.id = id;
     }
 
-    public String getStatus() {
-        return status;
+    public String getStatusCode() {
+        return statusCode;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setStatusCode(String statusCode) {
+        this.statusCode = statusCode;
     }
 
+    
 
     
     

@@ -10,7 +10,7 @@ public abstract class BaseDao {
     @PersistenceContext
 	private EntityManager entityManager;
 	
-	EntityManager getEM() {
+	public EntityManager getEM() {
 		return entityManager;
 	}
     

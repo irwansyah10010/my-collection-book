@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 
 import javax.validation.constraints.NotNull;
 
+import com.lawencon.readcollection.dto.booktype.BookTypeInsertBookReqDto;
+
 public class BookInsertReqDto {
     
     @NotNull(message = "isbn is must required")
@@ -23,9 +25,7 @@ public class BookInsertReqDto {
 
     private String authorName;
 
-    @NotNull(message = "book type id is must required")
-    private String bookTypeId;
-
+    private BookTypeInsertBookReqDto bookType;
 
     public String getIssbn() {
         return issbn;
@@ -83,11 +83,11 @@ public class BookInsertReqDto {
         this.authorName = authorName;
     }
 
-    public String getBookTypeId() {
-        return bookTypeId;
+    public BookTypeInsertBookReqDto getBookType() {
+        return bookType;
     }
 
-    public void setBookTypeId(String bookTypeId) {
-        this.bookTypeId = bookTypeId;
+    public void setBookType(BookTypeInsertBookReqDto bookType) {
+        this.bookType = bookType;
     }
 }

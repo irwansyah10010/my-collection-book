@@ -15,9 +15,68 @@ Dalam pembuatan rest API dengan java spring boot, membutuhkan JDK versi 11 dan P
 
 ## **Daftar API yang tersedia di MY COLLECTION BOOK**
 Sebelum melihat bentuk API nya, saya akan menjelaskan sedikit mengenai alur penggunaannya. Sederhananya sistem ini mencatat semua aktifitas membaca buku(hardcode), lalu buku dapat dikategorikan ke dalam beberapa tipe sesuai keinginan. berikutnya model yang tersedia:
-  - BookType: model untuk menyimpan kategori buku.
-  - Book: model untuk menyimpan buku beserta status dari buku tersebut.
+  - Status: model untuk status buku yang tersedia.
+  - BookType: model untuk kategori buku.
+  - Book: model untuk koleksi buku beserta status dari buku tersebut.
   - ReadBook: model untuk mencatat aktifitas membaca berdasarkan tanggal dan halaman terakhir yang dibaca.
+
+### Status
+API status wajib dijalankan pertama kali, karena mempengaruhi API Book 
+
+### Save
+Ini adalah api untuk membuat data status baru
+
+url: `http://localhost:8080/statuses/` dengan method: `POST`
+
+input:
+
+```json
+[
+  {
+    "statusCode":"N",
+    "statusName":"new"
+  },
+  {
+    "statusCode":"R",
+    "statusName":"read"
+  },
+  {
+    "statusCode":"C",
+    "statusName":"complete"
+  }
+]
+```
+
+#### Get All
+url: `http://localhost:8080/statuses/` dengan method: `GET`
+
+output:
+```json
+{
+  "data": [
+    {
+      "id": "string",
+      "statusCode": "string",
+      "statusName": "string"
+    },
+  ],
+  "countOfData": 0
+}
+```
+
+#### get by status code
+url: `http://localhost:8080/statuses/{code}/code`*({code}: diisi dengan status code yang dicari)* dengan method: `GET`
+
+```json
+{
+  "data": {
+    "id": "697b51d1-7aef-48c1-b3a4-823f6438356c",
+    "statusCode": "R",
+    "statusName": "read"
+  }
+}
+
+```
 
 ### Book Type
 
@@ -115,7 +174,7 @@ output:
 buku yang tersedia
 
 #### Get All
-url: `http://localhost:8080/book-types/` dengan method: `GET`
+url: `http://localhost:8080/books/` dengan method: `GET`
 
 output:
 ```json
@@ -179,7 +238,9 @@ input(request body):
     
     "publisher":"string",
     "authorName":"string",
-    "bookTypeId":"string"
+    "bookType":{
+      "bookTypeCode":"String"
+    }
 }
 ```
 
@@ -233,6 +294,25 @@ output:
 }
 ```
 
+#### Delete
+url: `http://localhost:8080/books/` dengan method: `DELETE`
+
+
+input: 
+```json
+{
+  "id":"string"
+}
+
+```
+
+output:
+```json
+{
+  "message":"string"
+}
+```
+
 ### Read Book
 Catatan buku yang dibaca
 
@@ -270,7 +350,7 @@ output:
 ```
 
 #### Get By Id
-url: `http://localhost:8080/read-books/{id}/id`*({id}: diisi dengan id yang dicari)* dengan method: `GET`
+url: `http://localhost:8080/read-books/{id}/id` *({id}: diisi dengan id yang dicari)* dengan method: `GET`
 
 output:
 ```json
@@ -294,6 +374,7 @@ output:
         },
         "publisher": "string",
         "authorName": "string"
+    }
   }
 }
 ```
@@ -305,9 +386,9 @@ input:
 ```json
 {
     "pageOfRead":0,
-    "status":"string",
-
-    "bookId":"string"
+    "book":{
+      "id":"string"
+    }
 }
 ```
 

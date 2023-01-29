@@ -3,6 +3,7 @@ package com.lawencon.readcollection.dto.book;
 import java.util.List;
 
 import com.lawencon.readcollection.model.ReadBook;
+import com.lawencon.readcollection.model.Status;
 
 
 public class BookListResDataDto {
@@ -10,7 +11,7 @@ public class BookListResDataDto {
     private String id;
     private String title;
     private Integer numberOfPage;
-    private String status;
+    private Status status;
 
     private List<ReadBook> ReadBooks;
 
@@ -33,10 +34,10 @@ public class BookListResDataDto {
         this.numberOfPage = numberOfPage;
     }
     
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
     public List<ReadBook> getReadBooks() {

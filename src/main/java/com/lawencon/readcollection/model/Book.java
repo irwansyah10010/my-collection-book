@@ -41,8 +41,9 @@ public class Book {
     @Column(name = "price")
     private BigDecimal price;
 
-    @Column(name = "status", nullable = false,length=10)
-    private String status;
+    @ManyToOne
+    @JoinColumn(name = "status_id",columnDefinition = "VARCHAR(36)")
+    private Status status;
 
     @ManyToOne
     @JoinColumn(name = "book_type_id",columnDefinition = "VARCHAR(36)")
@@ -107,11 +108,11 @@ public class Book {
         this.price = price;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

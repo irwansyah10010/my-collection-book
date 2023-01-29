@@ -11,16 +11,21 @@ import org.springframework.stereotype.Service;
 import com.lawencon.readcollection.constant.Message;
 import com.lawencon.readcollection.dao.BookDao;
 import com.lawencon.readcollection.dao.ReadBookDao;
+import com.lawencon.readcollection.dao.StatusDao;
 import com.lawencon.readcollection.dto.BaseInsertResDto;
 import com.lawencon.readcollection.dto.BaseResListDto;
 import com.lawencon.readcollection.dto.BaseResSingleDto;
 import com.lawencon.readcollection.dto.readbook.ReadBookInsertReqDto;
 import com.lawencon.readcollection.model.Book;
 import com.lawencon.readcollection.model.ReadBook;
+import com.lawencon.readcollection.model.Status;
 
 @Service
 public class ReadBookService {
     
+    @Autowired
+    private StatusDao statusDao;
+
     @Autowired
     private BookDao bookDao;
 
@@ -31,7 +36,7 @@ public class ReadBookService {
     public BaseInsertResDto save(ReadBookInsertReqDto readBookInsertReqDto){
         BaseInsertResDto baseInsertResDto = new BaseInsertResDto();
 
-        Book book = bookDao.findById(Book.class, readBookInsertReqDto.getBookId());
+        Book book = bookDao.findById(Book.class, readBookInsertReqDto.getBook().getId());
 
         if(book != null){
             ReadBook readBook = new ReadBook();
@@ -44,20 +49,30 @@ public class ReadBookService {
 
             if(readBookInsert != null){
                 // validasi
-                book.setStatus(readBookInsertReqDto.getStatus());
+                Status status = null; 
+                if (readBook.getPageOfRead() < book.getNumberOfPage() 
+                    && readBook.getPageOfRead() > 0 ) {
+                    status = statusDao.getByStatusCode("R");
+                    if(readBook.getPageOfRead() == book.getNumberOfPage()){
+                        status = statusDao.getByStatusCode("C");
+                    }
 
-                Book bookUpdateStatus = bookDao.update(book);
+                    book.setStatus(status);
+                    Book bookUpdateStatus = bookDao.update(book);
 
-                if(bookUpdateStatus != null){
-                    baseInsertResDto.setId(readBookInsert.getId());
-                    baseInsertResDto.setMessage(Message.SUCCESS_SAVE.getMessage());
+                    if(bookUpdateStatus != null){
+                        baseInsertResDto.setId(readBookInsert.getId());
+                        baseInsertResDto.setMessage(Message.SUCCESS_SAVE.getMessage());
+                    }
+                } else {
+                    readBookDao.delete("tb_read_book", "id", readBookInsert.getId());
+                    baseInsertResDto.setMessage(Message.FAILED_SAVE.getMessage()+", page of read isnt greater to page number of book");
                 }
-
             }else{
                 baseInsertResDto.setMessage(Message.FAILED_SAVE.getMessage());
             }
         }else{
-            baseInsertResDto.setMessage(Message.FAILED_SAVE.getMessage());
+            baseInsertResDto.setMessage(Message.FAILED_SAVE.getMessage()+", Book isnt available");
         }
 
         return baseInsertResDto;

@@ -195,4 +195,14 @@ public class BookTypeService {
 
         return baseResSingleDto;
     }
+
+    public BaseResSingleDto<BookType> getByBookTypeCode(String bookTypeCode){
+        BaseResSingleDto<BookType> baseResSingleDto = new BaseResSingleDto<>();
+
+        BookType BookType = bookTypeDao.findByBookTypeCode(bookTypeCode);
+
+        baseResSingleDto.setData(BookType);
+
+        return baseResSingleDto;
+    }
 }

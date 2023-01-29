@@ -2,15 +2,14 @@ package com.lawencon.readcollection.dto.readbook;
 
 import javax.validation.constraints.NotNull;
 
+import com.lawencon.readcollection.dto.book.BookInsertReadBookReqDto;
+
 public class ReadBookInsertReqDto {
 
     @NotNull(message = "page of read is must required")
     private Integer pageOfRead;
 
-    @NotNull(message = "book id is must required")
-    private String bookId;
-
-    private String status;
+    private BookInsertReadBookReqDto book;
 
     public Integer getPageOfRead() {
         return pageOfRead;
@@ -20,20 +19,12 @@ public class ReadBookInsertReqDto {
         this.pageOfRead = pageOfRead;
     }
 
-    public String getBookId() {
-        return bookId;
+    public BookInsertReadBookReqDto getBook() {
+        return book;
     }
 
-    public void setBookId(String bookId) {
-        this.bookId = bookId;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
+    public void setBook(BookInsertReadBookReqDto book) {
+        this.book = book;
     }
     
 }

@@ -13,6 +13,7 @@ import com.lawencon.readcollection.constant.Message;
 import com.lawencon.readcollection.dao.BookDao;
 import com.lawencon.readcollection.dao.BookTypeDao;
 import com.lawencon.readcollection.dao.ReadBookDao;
+import com.lawencon.readcollection.dao.StatusDao;
 import com.lawencon.readcollection.dto.BaseInsertResDto;
 import com.lawencon.readcollection.dto.BaseResListDto;
 import com.lawencon.readcollection.dto.BaseResSingleDto;
@@ -26,10 +27,14 @@ import com.lawencon.readcollection.dto.book.BookUpdateStatusReqDto;
 import com.lawencon.readcollection.model.Book;
 import com.lawencon.readcollection.model.BookType;
 import com.lawencon.readcollection.model.ReadBook;
+import com.lawencon.readcollection.model.Status;
 
 @Service
 public class BookService {
     
+    @Autowired
+    private StatusDao statusDao;
+
     @Autowired
     private BookDao bookDao;
 
@@ -37,16 +42,17 @@ public class BookService {
     private BookTypeDao bookTypeDao;
 
     @Autowired
-    private ReadBookDao readBookDao ;
+    private ReadBookDao readBookDao;
 
     @Transactional(rollbackOn = Exception.class)
     public BaseInsertResDto save(BookInsertReqDto bookInsertReqDto){
         BaseInsertResDto baseInsertResDto = new BaseInsertResDto();
 
-        BookType bookType = bookTypeDao.findById(BookType.class, bookInsertReqDto.getBookTypeId());
+        BookType bookType = bookTypeDao.findByBookTypeCode(bookInsertReqDto.getBookType().getBookTypeCode());
 
         if(bookType != null){
             Book book = new Book();
+            Status status = statusDao.getByStatusCode("N");
         
             book.setIssbn(bookInsertReqDto.getIssbn());
             book.setTitle(bookInsertReqDto.getTitle());
@@ -54,7 +60,7 @@ public class BookService {
     
             book.setSynopsis(bookInsertReqDto.getSynopsis());
             book.setPrice(bookInsertReqDto.getPrice());
-            book.setStatus("new");
+            book.setStatus(status);
             book.setPublisher(bookInsertReqDto.getPublisher());
             book.setAuthorName(bookInsertReqDto.getAuthorName());
 
@@ -69,7 +75,7 @@ public class BookService {
                 baseInsertResDto.setMessage(Message.FAILED_SAVE.getMessage());
             }
         }else{
-            baseInsertResDto.setMessage(Message.FAILED_SAVE.getMessage());
+            baseInsertResDto.setMessage(Message.FAILED_SAVE.getMessage()+", Book Type isnt available");
         }
 
         return baseInsertResDto;
@@ -127,9 +133,11 @@ public class BookService {
 
         Book book = bookDao.findById(Book.class, bookUpdateStatusReqDto.getId());
 
+        Status status = statusDao.getByStatusCode(bookUpdateStatusReqDto.getStatusCode());
+
         if(book != null){
 
-            book.setStatus(bookUpdateStatusReqDto.getStatus());
+            book.setStatus(status);
 
             Book bookUpdate = bookDao.update(book);
 
@@ -250,7 +258,7 @@ public class BookService {
             bookSingleResDataDto.setStatus(book.getStatus());
             bookSingleResDataDto.setNumberOfPage(book.getNumberOfPage());
             
-            
+            bookSingleResDataDto.setSynopsis(book.getSynopsis());
             bookSingleResDataDto.setAuthor(id);
             bookSingleResDataDto.setPublisher(book.getPublisher());
             bookSingleResDataDto.setBookType(book.getBookType());

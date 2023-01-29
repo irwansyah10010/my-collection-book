@@ -72,4 +72,11 @@ public class BookTypeController {
 
         return new ResponseEntity<>(baseDeleteResDto, HttpStatus.OK);
     }
+
+    @GetMapping("{bookTypeCode}/code")
+    public ResponseEntity<BaseResSingleDto<BookType>> getBybookTypeCode(@PathVariable("bookTypeCode") String bookTypeCode){
+        BaseResSingleDto<BookType> baseResSingleDto = bookTypeService.getByBookTypeCode(bookTypeCode);
+
+        return new ResponseEntity<BaseResSingleDto<BookType>>(baseResSingleDto, HttpStatus.OK);
+    }
 }
