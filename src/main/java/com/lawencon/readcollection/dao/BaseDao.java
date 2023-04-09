@@ -17,7 +17,6 @@ public abstract class BaseDao {
     public <T> T save(T entity){
         getEM().persist(entity);
 
-
         return entity;
     }
 
