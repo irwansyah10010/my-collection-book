@@ -1,0 +1,10 @@
+POST http://localhost:8080/read-books/
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyYyI6InNlIiwiaWQiOiIyNWRjZmQ3OC1jMGYyLTQ5NGEtYmU1MC0wYTk3MzY1YmFjMjgiLCJleHAiOjE3NTQ0NDk3MTZ9.MmIiSQC9N36YMeADpsPUrOe_-XeCWqlm9qTXUzYhXko
+
+{
+    "pageOfRead":3,
+    "book":{
+      "id":"c8b3c8c6-b818-49b8-9e4f-d266ad457b85"
+    }
+}
