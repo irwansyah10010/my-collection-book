@@ -27,11 +27,17 @@ public abstract class BaseDao {
         return entityUpdate;
     }
 
-    public Boolean delete(String tableName,String columnName,Object value){
+    public Boolean delete(Class<?> clazz, String columnName,Object value){
         StringBuilder sql = new StringBuilder();
 
+        String tablename = "NONE";
+        if (clazz.isAnnotationPresent(Table.class)) {
+            Table table = clazz.getAnnotation(Table.class);
+            tablename = table.name();
+        }
+
         sql.append("DELETE FROM ")
-        .append(tableName).append(" ")
+        .append(tablename).append(" ")
         .append("WHERE ")
         .append(columnName).append(" = ").append(":value");
 
@@ -42,20 +48,20 @@ public abstract class BaseDao {
             .setParameter("value", value)
             .executeUpdate();
         } catch (Exception e) {
-            
+            e.printStackTrace();
         }
 
         return delete > 0;
     }
 
-    public <T> T findById(Class<T> clazz,String id){
+    public <T> T findByPK(Class<T> clazz,String pk){
         T entityFind = null;
 
         try {
-            entityFind = getEM().find(clazz, id);
+            entityFind = getEM().find(clazz, pk);
                         
         } catch (Exception e) {
-            
+            e.printStackTrace();
         }
 
         if(entityFind != null){
@@ -77,29 +83,32 @@ public abstract class BaseDao {
         return lists;
     }
     
-    public Integer getCountOfData(String tablename){
-        StringBuilder sql = new StringBuilder();
+    
+    // public Integer getCountOfData(String tablename){
+    //     StringBuilder sql = new StringBuilder();
 
-        sql.append("SELECT count(*) FROM ")
-        .append(tablename);
+    //     sql.append("SELECT count(*) FROM ")
+    //     .append(tablename);
 
-        Integer countOfData = 0;
+    //     Integer countOfData = 0;
 
-        Object obj = null;
+    //     Object obj = null;
 
-        try {
-            obj = getEM().createNativeQuery(sql.toString()).getSingleResult();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    //     try {
+    //         obj = getEM().createNativeQuery(sql.toString()).getSingleResult();
+    //     } catch (Exception e) {
+    //         e.printStackTrace();
+    //     }
 
-        if(obj != null){
-            countOfData = Integer.parseInt(obj.toString());
-        }
+    //     if(obj != null){
+    //         countOfData = Integer.parseInt(obj.toString());
+    //     }
 
-        return countOfData;
-    }
+    //     return countOfData;
+    // }
 
+    
+    
     public Integer count(Class<?> clazz){
         StringBuilder sql = new StringBuilder();
 

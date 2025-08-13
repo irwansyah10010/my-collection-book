@@ -35,51 +35,52 @@ public class BookController {
     private BookService bookService;
 
     @GetMapping
-    public ResponseEntity<BaseResListDto<BookListResDataDto>> getAll(@RequestParam(value="search",required = false,defaultValue = "-") Object search){
-        BaseResListDto<BookListResDataDto> baseResListDto = null;
+    public ResponseEntity<BaseResListDto<?>> getAll(@RequestParam(value="search",required = false,defaultValue = "-") String search, Integer page, Integer limit){
+        BaseResListDto<?> baseResListDto = null;
 
         if(search.equals("-")){
-            baseResListDto = bookService.getAll();
+            baseResListDto = bookService.getAll(page, limit);
         }else{
-            baseResListDto = bookService.getAll(search);
+            baseResListDto = bookService.getAll(page, limit, search);
         }
         
         return new ResponseEntity<>(baseResListDto, HttpStatus.OK);
     }
 
-    @GetMapping("{id}/id")
-    public ResponseEntity<BaseResSingleDto<BookSingleResDto>> getById(@PathVariable("id") String id){
-        BaseResSingleDto<BookSingleResDto> baseResSingleDto = bookService.getById(id);
+    //
+    // @GetMapping("{id}/id")
+    // public ResponseEntity<BaseResSingleDto<BookSingleResDto>> getById(@PathVariable("id") String id){
+    //     BaseResSingleDto<BookSingleResDto> baseResSingleDto = bookService.getById(id);
 
-        return new ResponseEntity<>(baseResSingleDto, HttpStatus.OK);
-    }
+    //     return new ResponseEntity<>(baseResSingleDto, HttpStatus.OK);
+    // }
 
-    @PostMapping
-    public ResponseEntity<BaseInsertResDto> save(@RequestBody BookInsertReqDto bookInsertReqDto){
-        BaseInsertResDto baseInsertResDto = bookService.save(bookInsertReqDto);
+    // @PostMapping
+    // public ResponseEntity<BaseInsertResDto> save(@RequestBody BookInsertReqDto bookInsertReqDto){
+    //     BaseInsertResDto baseInsertResDto = bookService.save(bookInsertReqDto);
 
-        return new ResponseEntity<>(baseInsertResDto, HttpStatus.CREATED);
-    }
+    //     return new ResponseEntity<>(baseInsertResDto, HttpStatus.CREATED);
+    // }
 
 
-    @PutMapping
-    public ResponseEntity<BaseUpdateAndDeleteResDto> update(@RequestBody BookUpdateReqDto bookUpdateReqDto){
-        BaseUpdateAndDeleteResDto baseUpdateResDto = bookService.update(bookUpdateReqDto);
+    // @PutMapping
+    // public ResponseEntity<BaseUpdateAndDeleteResDto> update(@RequestBody BookUpdateReqDto bookUpdateReqDto){
+    //     BaseUpdateAndDeleteResDto baseUpdateResDto = bookService.update(bookUpdateReqDto);
 
-        return new ResponseEntity<>(baseUpdateResDto, HttpStatus.OK);
-    }
+    //     return new ResponseEntity<>(baseUpdateResDto, HttpStatus.OK);
+    // }
 
-    @PutMapping("update-status")
-    public ResponseEntity<BaseUpdateAndDeleteResDto> update(@RequestBody BookUpdateStatusReqDto bookUpdateStatusReqDto){
-        BaseUpdateAndDeleteResDto baseUpdateResDto = bookService.updateStatus(bookUpdateStatusReqDto);
+    // @PutMapping("update-status")
+    // public ResponseEntity<BaseUpdateAndDeleteResDto> update(@RequestBody BookUpdateStatusReqDto bookUpdateStatusReqDto){
+    //     BaseUpdateAndDeleteResDto baseUpdateResDto = bookService.updateStatus(bookUpdateStatusReqDto);
 
-        return new ResponseEntity<>(baseUpdateResDto, HttpStatus.OK);
-    }
+    //     return new ResponseEntity<>(baseUpdateResDto, HttpStatus.OK);
+    // }
 
-    @DeleteMapping
-    public ResponseEntity<BaseUpdateAndDeleteResDto> delete(@RequestBody BookDeleteReqDto bookDeleteReqDto){
-        BaseUpdateAndDeleteResDto baseDeleteResDto = bookService.delete(bookDeleteReqDto);
+    // @DeleteMapping
+    // public ResponseEntity<BaseUpdateAndDeleteResDto> delete(@RequestBody BookDeleteReqDto bookDeleteReqDto){
+    //     BaseUpdateAndDeleteResDto baseDeleteResDto = bookService.delete(bookDeleteReqDto);
 
-        return new ResponseEntity<>(baseDeleteResDto, HttpStatus.OK);
-    }
+    //     return new ResponseEntity<>(baseDeleteResDto, HttpStatus.OK);
+    // }
 }

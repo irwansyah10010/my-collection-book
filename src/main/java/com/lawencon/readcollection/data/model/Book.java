@@ -1,39 +1,26 @@
 package com.lawencon.readcollection.data.model;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "tb_book")
 public class Book {
     
     @Id
-    @GeneratedValue(generator = "uuid2")
-	@GenericGenerator(name = "uuid2", strategy = "uuid2")
-    @Column(length = 36,nullable = false)
-    private String id;
-
     @Column(name = "issbn",nullable = false,length = 15)
     private String issbn;
 
     @Column(name = "title",nullable = false,length = 50)
     private String title;
 
-    @Column(name = "synopsis",columnDefinition = "TEXT")
-    private String synopsis;
+    @Column(name = "description",columnDefinition = "TEXT")
+    private String description;
 
     @Column(name = "number_of_page",nullable = false,length = 5)
     private Integer numberOfPage;
@@ -41,32 +28,16 @@ public class Book {
     @Column(name = "price")
     private BigDecimal price;
 
-    @ManyToOne
-    @JoinColumn(name = "status_id",columnDefinition = "VARCHAR(36)")
-    private Status status;
-
-    @ManyToOne
-    @JoinColumn(name = "book_type_id",columnDefinition = "VARCHAR(36)")
-    private BookType bookType;
-
     @Column(name = "publisher",nullable = false,length = 20)
     private String publisher;
 
     @Column(name = "author_name",nullable = false,length = 20)
     private String authorName;
 
+    @ManyToOne
+    @JoinColumn(name = "status_code",columnDefinition = "VARCHAR(36)")
+    private Status status;
 
-    // @Transient
-    // @OneToMany
-    // private List<ReadBook> readBooks = new ArrayList<>();
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getIssbn() {
         return issbn;
@@ -84,12 +55,12 @@ public class Book {
         this.title = title;
     }
 
-    public String getSynopsis() {
-        return synopsis;
+    public String getDescription() {
+        return description;
     }
 
-    public void setSynopsis(String synopsis) {
-        this.synopsis = synopsis;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public Integer getNumberOfPage() {
@@ -114,14 +85,6 @@ public class Book {
 
     public void setStatus(Status status) {
         this.status = status;
-    }
-
-    public BookType getBookType() {
-        return bookType;
-    }
-
-    public void setBookType(BookType bookType) {
-        this.bookType = bookType;
     }
 
     public String getPublisher() {

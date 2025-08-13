@@ -6,7 +6,7 @@ public class BaseResListDto<T> {
     
     private List<T> data;
     private Integer page;
-    private Integer countPerPage;
+    private Integer limit;
     private Integer countOfData;
     
     public List<T> getData() {
@@ -27,12 +27,12 @@ public class BaseResListDto<T> {
     public void setPage(Integer page) {
         this.page = page;
     }
-    public Integer getCountPerPage() {
-        return countPerPage;
+    public Integer getLimit() {
+        return limit;
     }
-    public void setCountPerPage(Integer countPerPage) {
-        this.countPerPage = countPerPage;
+    public void setLimit(Integer limit) {
+        this.limit = limit;
     }
-
+    
     
 }
