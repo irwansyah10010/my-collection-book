@@ -12,7 +12,7 @@ public class StatusDao extends BaseDao{
 
     public List<Map<String, Object>> findAll(){
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT id, status_code, status_name ")
+        sql.append("SELECT * FROM ")
         .append("tb_status ");
 
         List<Map<String, Object>> result = new ArrayList<>();
@@ -25,9 +25,8 @@ public class StatusDao extends BaseDao{
                 Object[] o = (Object[]) obj;
                 
                 Map<String, Object> map = new HashMap<>();
-                map.put("id", o[0]);
-                map.put("statusCode", o[1]);
-                map.put("statusName", o[2]);
+                map.put("statusCode", o[0]);
+                map.put("statusName", o[1]);
                 result.add(map);
             }
         }catch(Exception e){
