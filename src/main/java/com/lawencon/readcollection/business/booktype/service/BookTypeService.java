@@ -1,8 +1,7 @@
 package com.lawencon.readcollection.business.booktype.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Map;
 
 import javax.transaction.Transactional;
 
@@ -12,17 +11,13 @@ import org.springframework.stereotype.Service;
 import com.lawencon.readcollection.base.constant.Message;
 import com.lawencon.readcollection.base.dto.req.BaseInsertResDto;
 import com.lawencon.readcollection.base.dto.req.BaseResListDto;
-import com.lawencon.readcollection.base.dto.req.BaseResSingleDto;
 import com.lawencon.readcollection.base.dto.req.BaseUpdateAndDeleteResDto;
 import com.lawencon.readcollection.business.booktype.dto.BookTypeDeleteReqDto;
 import com.lawencon.readcollection.business.booktype.dto.BookTypeInsertReqDto;
-import com.lawencon.readcollection.business.booktype.dto.BookTypeResDataDto;
 import com.lawencon.readcollection.business.booktype.dto.BookTypeUpdateReqDto;
-import com.lawencon.readcollection.data.dao.BookDao;
 import com.lawencon.readcollection.data.dao.BookTypeDao;
-import com.lawencon.readcollection.data.dao.ReadBookDao;
-import com.lawencon.readcollection.data.model.Book;
 import com.lawencon.readcollection.data.model.BookType;
+import com.lawencon.readcollection.data.model.Status;
 
 @Service
 public class BookTypeService {
@@ -30,11 +25,15 @@ public class BookTypeService {
     @Autowired
     private BookTypeDao bookTypeDao;
 
-    @Autowired
-    private BookDao bookDao;
+    public BaseResListDto<BookType> getAll(){
+        List<BookType> all = bookTypeDao.findAll();
 
-    // @Autowired
-    // private ReadBookDao readBookDao;
+        BaseResListDto<BookType> baseResListDto = new BaseResListDto<>();
+        baseResListDto.setData(all);
+        baseResListDto.setCountOfData(bookTypeDao.count(Status.class));
+
+        return baseResListDto;
+    }
 
     @Transactional(rollbackOn = Exception.class)
     public BaseInsertResDto save(BookTypeInsertReqDto bookTypeReqDto){
@@ -48,7 +47,7 @@ public class BookTypeService {
         BookType bookTypeInsert = bookTypeDao.save(bookType);
 
         if(bookTypeInsert != null){
-            baseInsertResDto.setId(bookTypeInsert.getId());
+            baseInsertResDto.setId(bookTypeInsert.getBookTypeCode());
             baseInsertResDto.setMessage(Message.SUCCESS_SAVE.getMessage());
         }else{
             baseInsertResDto.setMessage(Message.FAILED_SAVE.getMessage());
@@ -61,10 +60,9 @@ public class BookTypeService {
     public BaseUpdateAndDeleteResDto update(BookTypeUpdateReqDto bookTypeUpdateReqDto){
         BaseUpdateAndDeleteResDto baseUpdateResDto = new BaseUpdateAndDeleteResDto();
 
-        BookType bookType = bookTypeDao.findById(BookType.class, bookTypeUpdateReqDto.getId());
+        BookType bookType = bookTypeDao.findByPK(BookType.class, bookTypeUpdateReqDto.getBookTypeCode());
 
         if(bookType != null){
-
             bookType.setBookTypeName(bookTypeUpdateReqDto.getBookTypeName());
 
             BookType bookTypeUpdate = bookTypeDao.update(bookType);
@@ -81,128 +79,19 @@ public class BookTypeService {
         return baseUpdateResDto;
     }
 
-    // @Transactional(rollbackOn = Exception.class)
-    // public BaseUpdateAndDeleteResDto delete(BookTypeDeleteReqDto bookTypeDeleteReqDto){
-    //     BaseUpdateAndDeleteResDto baseDeleteResDto = new BaseUpdateAndDeleteResDto();
-    //     BookType bookType = bookTypeDao.findById(BookType.class, bookTypeDeleteReqDto.getId());
+    @Transactional(rollbackOn = Exception.class)
+    public BaseUpdateAndDeleteResDto delete(BookTypeDeleteReqDto bookTypeDeleteReqDto){
+        BaseUpdateAndDeleteResDto baseUpdateResDto = new BaseUpdateAndDeleteResDto();
 
-    //     if(bookType != null){
-
-    //         List<Book> books = bookDao.getByBookTypeId(bookTypeDeleteReqDto.getId());
-
-    //         // delete read book, book and book type
-    //         books.forEach(book ->{
-    //             readBookDao.delete("tb_read_book", "book_id", book.getId());
-    //         });
-
-    //         bookDao.delete("tb_book", "book_type_id", bookTypeDeleteReqDto.getId());
-
-    //         Boolean isDeleteBookType = bookTypeDao.delete("tb_book_type", "id", bookTypeDeleteReqDto.getId());
-
-    //         if(isDeleteBookType){
-    //             baseDeleteResDto.setMessage(Message.SUCCESS_DELETE.getMessage()+"(data relation a book, deleted)");    
-    //         }
-            
-            
-            
-    //     }else{
-    //         baseDeleteResDto.setMessage(Message.FAILED_DELETE.getMessage());
-    //     }
-
-    //     return baseDeleteResDto;
-    // }
-
-    public BaseResListDto<BookTypeResDataDto> getAll(){
-        BaseResListDto<BookTypeResDataDto> baseResListDto = new BaseResListDto<>();
-
-        String tableName = "tb_book_type";
-
-        List<BookType> bookTypes = bookTypeDao.getAll(tableName, BookType.class);
-        Integer countOfBookType = bookTypeDao.getCountOfData(tableName);
-
-        List<BookTypeResDataDto> bookTypeResDataDtos = new ArrayList<>();
-        bookTypes.forEach(bookType->{
-            BookTypeResDataDto bookTypeResDataDto = new BookTypeResDataDto();
-
-            bookTypeResDataDto.setId(bookType.getId());
-            bookTypeResDataDto.setBookTypeCode(bookType.getBookTypeCode());
-            bookTypeResDataDto.setBookTypeName(bookType.getBookTypeName());
-            
-            List<Book> books = bookDao.getByBookTypeId(bookType.getId());
-
-            bookTypeResDataDto.setBooks(books);
-
-            bookTypeResDataDtos.add(bookTypeResDataDto);
-        });
-
-        baseResListDto.setData(bookTypeResDataDtos);
-        baseResListDto.setCountOfData(countOfBookType);
-
-        return baseResListDto;
-    }
-
-    public BaseResListDto<BookTypeResDataDto> getAll(Object search){
-        BaseResListDto<BookTypeResDataDto> baseResListDto = new BaseResListDto<>();
-
-        String tableName = "tb_book_type";
-
-        List<BookType> bookTypes = bookTypeDao.getAll(tableName, BookType.class);
-
-        bookTypes =  bookTypes.stream()
-        .filter(bookType-> bookType.getBookTypeCode().equals(search) 
-                || bookType.getBookTypeName().equals(search))
-        .collect(Collectors.toList());
-
-        List<BookTypeResDataDto> bookTypeResDataDtos = new ArrayList<>();
-        bookTypes.forEach(bookType->{
-            BookTypeResDataDto bookTypeResDataDto = new BookTypeResDataDto();
-
-            bookTypeResDataDto.setId(bookType.getId());
-            bookTypeResDataDto.setBookTypeCode(bookType.getBookTypeCode());
-            bookTypeResDataDto.setBookTypeName(bookType.getBookTypeName());
-            
-            List<Book> books = bookDao.getByBookTypeId(bookType.getId());
-
-            bookTypeResDataDto.setBooks(books);
-
-            bookTypeResDataDtos.add(bookTypeResDataDto);
-        });
-
-        baseResListDto.setData(bookTypeResDataDtos);
-        baseResListDto.setCountOfData(bookTypes.size());
-
-        return baseResListDto;
-    }
-
-    public BaseResSingleDto<BookTypeResDataDto> getById(String id){
-        BaseResSingleDto<BookTypeResDataDto> baseResSingleDto = new BaseResSingleDto<>();
-
-        BookType bookType = bookTypeDao.findById(BookType.class, id);
-
-        if(bookType != null){
-            BookTypeResDataDto bookTypeResDataDto = new BookTypeResDataDto();
-            bookTypeResDataDto.setId(bookType.getId());
-            bookTypeResDataDto.setId(bookType.getId());
-            bookTypeResDataDto.setBookTypeCode(bookType.getBookTypeCode());
-            bookTypeResDataDto.setBookTypeName(bookType.getBookTypeName());
-            
-            List<Book> books = bookDao.getByBookTypeId(bookType.getId());
-
-            bookTypeResDataDto.setBooks(books);
-
-            baseResSingleDto.setData(bookTypeResDataDto);
+        Boolean isDelete = bookTypeDao.delete(BookType.class, "book_type_code", bookTypeDeleteReqDto.getBookTypeCode());
+        
+        if(isDelete){
+            baseUpdateResDto.setMessage(Message.SUCCESS_DELETE.getMessage());
+        }else{
+            baseUpdateResDto.setMessage(Message.FAILED_DELETE.getMessage());
         }
-
-        return baseResSingleDto;
+        
+        return baseUpdateResDto;
     }
 
-    public BaseResSingleDto<BookType> getByBookTypeCode(String bookTypeCode){
-        BaseResSingleDto<BookType> baseResSingleDto = new BaseResSingleDto<>();
-
-        BookType BookType = bookTypeDao.findByBookTypeCode(bookTypeCode);
-
-        baseResSingleDto.setData(BookType);
-
-        return baseResSingleDto;
-    }
 }

@@ -4,10 +4,18 @@ import javax.validation.constraints.NotNull;
 
 public class BookTypeUpdateReqDto {
     
-    @NotNull(message = "id is must required")
-    private String id;
+    @NotNull(message = "book code is must required")
+    private String bookTypeCode;
 
     private String bookTypeName;
+
+    public String getBookTypeCode() {
+        return bookTypeCode;
+    }
+
+    public void setBookTypeCode(String bookTypeCode) {
+        this.bookTypeCode = bookTypeCode;
+    }    
 
     public String getBookTypeName() {
         return bookTypeName;
@@ -17,11 +25,4 @@ public class BookTypeUpdateReqDto {
         this.bookTypeName = bookTypeName;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 }

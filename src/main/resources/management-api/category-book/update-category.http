@@ -1,8 +1,8 @@
-POST http://localhost:8080/mbc/book-types/
+PUT http://localhost:8080/mbc/book-types/
 content-type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyYyI6InNlIiwiZXhwIjoxNzU1MDg0NDI5LCJ1c2VybmFtZSI6Imlyd2FuLmRldiJ9.4gonhmkCKvqjJjfawhu-J4TXZrrh3pi2kmO8Hk1cLgw
 
 {
     "bookTypeCode": "TEST",
-    "bookTypeName": "TEST"
+    "bookTypeName": "TEST 2"
 }

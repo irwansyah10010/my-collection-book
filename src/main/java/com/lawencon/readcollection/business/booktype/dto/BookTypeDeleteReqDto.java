@@ -1,13 +1,14 @@
 package com.lawencon.readcollection.business.booktype.dto;
 
 public class BookTypeDeleteReqDto {
-    private String id;
+    
+    private String bookTypeCode;
 
-    public String getId() {
-        return id;
+    public String getBookTypeCode() {
+        return bookTypeCode;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setBookTypeCode(String bookTypeCode) {
+        this.bookTypeCode = bookTypeCode;
     }
 }

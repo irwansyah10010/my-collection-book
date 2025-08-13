@@ -1,0 +1,7 @@
+DELETE http://localhost:8080/mbc/book-types/
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyYyI6InNlIiwiZXhwIjoxNzU1MDg1Mjk4LCJ1c2VybmFtZSI6Imlyd2FuLmRldiJ9.d9Fgm-YA0UxF3n1xqGsvZbX048fLmv_5zUJyUa8GS7w
+
+{
+    "bookTypeCode": "TEST"
+}
