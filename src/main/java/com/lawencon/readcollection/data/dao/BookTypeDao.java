@@ -1,5 +1,8 @@
 package com.lawencon.readcollection.data.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.readcollection.data.model.BookType;
@@ -7,24 +10,19 @@ import com.lawencon.readcollection.data.model.BookType;
 @Repository
 public class BookTypeDao extends BaseDao{
 
-    public BookType findByBookTypeCode(String bookTypeCode){
-        String sql = "SELECT id, book_type_code, book_type_name FROM tb_book_type WHERE book_type_code = :bookTypeCode";
+    public List<BookType> findAll(){
+        String sql = "SELECT * FROM tb_book_type";
 
-        Object obj = null;
+        List<BookType> result = new ArrayList<>();
 
         try {
-            obj = getEM().createNativeQuery(sql,BookType.class)
-                    .setParameter("bookTypeCode", bookTypeCode)
-                    .getSingleResult(); 
+            result = getEM()
+            .createNativeQuery(sql.toString(), BookType.class)
+            .getResultList();
         } catch (Exception e) {
-            
-        }
-        
-        BookType bookType = null;
-        if(obj != null){            
-            bookType = (BookType) obj;
+            e.printStackTrace();
         }
 
-        return bookType;
+        return result;
     }
 }
