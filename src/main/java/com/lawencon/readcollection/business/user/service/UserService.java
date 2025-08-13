@@ -35,7 +35,7 @@ public class UserService implements UserDetailsService {
         Map<String, Object> message = new HashMap<>();
 
         if(userInsert != null){
-            message.put("id", userInsert.getId());
+            message.put("id", userInsert.getUsername());
             message.put("message", "User has been added");
         }
 

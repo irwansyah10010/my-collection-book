@@ -44,12 +44,12 @@ public class LoginController {
         cal.add(Calendar.HOUR_OF_DAY, 1);
 
         claims.put("exp", cal.getTime());
-        claims.put("id", user.getId());
+        claims.put("username", user.getUsername());
         claims.put("rc", user.getRole());
 
         Map<String, String> message = new HashMap<>();
 
-        message.put("id", user.getId());
+        message.put("username", user.getUsername());
         message.put("name", user.getName());
         message.put("role",user.getRole());
         message.put("token",jwtUtil.generated(claims));
