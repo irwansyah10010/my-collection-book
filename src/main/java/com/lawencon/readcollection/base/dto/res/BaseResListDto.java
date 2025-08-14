@@ -1,4 +1,4 @@
-package com.lawencon.readcollection.base.dto.req;
+package com.lawencon.readcollection.base.dto.res;
 
 import java.util.List;
 
