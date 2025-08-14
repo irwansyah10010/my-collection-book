@@ -27,7 +27,7 @@ public abstract class BaseDao {
         return entityUpdate;
     }
 
-    public Boolean delete(Class<?> clazz, String columnName,Object value){
+    public Boolean delete(Class<?> clazz, String columnName, Object value){
         StringBuilder sql = new StringBuilder();
 
         String tablename = "NONE";
@@ -54,15 +54,19 @@ public abstract class BaseDao {
         return delete > 0;
     }
 
-    public <T> T findByPK(Class<T> clazz,String pk){
-        T entityFind = null;
-
+    public <T> T findByUpdate(Class<T> clazz, String pk){
         try {
-            entityFind = getEM().find(clazz, pk);
+            return getEM().find(clazz, pk);
                         
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
+
+    }
+
+    public <T> T findByPK(Class<T> clazz, String pk){
+        T entityFind = findByUpdate(clazz, pk);
 
         if(entityFind != null){
             getEM().detach(entityFind);
