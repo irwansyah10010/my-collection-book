@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lawencon.readcollection.base.dto.req.BaseInsertResDto;
-import com.lawencon.readcollection.base.dto.req.BaseResListDto;
-import com.lawencon.readcollection.base.dto.req.BaseUpdateAndDeleteResDto;
+import com.lawencon.readcollection.base.dto.res.BaseInsertResDto;
+import com.lawencon.readcollection.base.dto.res.BaseResListDto;
+import com.lawencon.readcollection.base.dto.res.BaseUpdateAndDeleteResDto;
 import com.lawencon.readcollection.business.booktype.dto.BookTypeDeleteReqDto;
 import com.lawencon.readcollection.business.booktype.dto.BookTypeInsertReqDto;
 import com.lawencon.readcollection.business.booktype.dto.BookTypeUpdateReqDto;

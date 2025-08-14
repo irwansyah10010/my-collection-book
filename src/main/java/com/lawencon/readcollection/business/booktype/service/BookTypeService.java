@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.readcollection.base.constant.Message;
-import com.lawencon.readcollection.base.dto.req.BaseInsertResDto;
-import com.lawencon.readcollection.base.dto.req.BaseResListDto;
-import com.lawencon.readcollection.base.dto.req.BaseUpdateAndDeleteResDto;
+import com.lawencon.readcollection.base.dto.res.BaseInsertResDto;
+import com.lawencon.readcollection.base.dto.res.BaseResListDto;
+import com.lawencon.readcollection.base.dto.res.BaseUpdateAndDeleteResDto;
 import com.lawencon.readcollection.business.booktype.dto.BookTypeDeleteReqDto;
 import com.lawencon.readcollection.business.booktype.dto.BookTypeInsertReqDto;
 import com.lawencon.readcollection.business.booktype.dto.BookTypeUpdateReqDto;
@@ -30,7 +30,7 @@ public class BookTypeService {
 
         BaseResListDto<BookType> baseResListDto = new BaseResListDto<>();
         baseResListDto.setData(all);
-        baseResListDto.setCountOfData(bookTypeDao.count(Status.class));
+        baseResListDto.setCountOfData(bookTypeDao.count(BookType.class));
 
         return baseResListDto;
     }
@@ -50,7 +50,7 @@ public class BookTypeService {
             baseInsertResDto.setId(bookTypeInsert.getBookTypeCode());
             baseInsertResDto.setMessage(Message.SUCCESS_SAVE.getMessage());
         }else{
-            baseInsertResDto.setMessage(Message.FAILED_SAVE.getMessage());
+            throw new RuntimeException("Failed to save");
         } 
 
         return baseInsertResDto;
@@ -70,10 +70,10 @@ public class BookTypeService {
             if(bookTypeUpdate != null){
                 baseUpdateResDto.setMessage(Message.SUCCESS_UPDATE.getMessage());
             }else{
-                baseUpdateResDto.setMessage(Message.FAILED_UPDATE.getMessage());
+                throw new RuntimeException("Failed to save");
             }
         }else{
-            baseUpdateResDto.setMessage(Message.FAILED_UPDATE.getMessage());
+            baseUpdateResDto.setMessage("Book type isn't available");
         }
 
         return baseUpdateResDto;
@@ -83,6 +83,9 @@ public class BookTypeService {
     public BaseUpdateAndDeleteResDto delete(BookTypeDeleteReqDto bookTypeDeleteReqDto){
         BaseUpdateAndDeleteResDto baseUpdateResDto = new BaseUpdateAndDeleteResDto();
 
+        // delete book
+
+        // delete book type
         Boolean isDelete = bookTypeDao.delete(BookType.class, "book_type_code", bookTypeDeleteReqDto.getBookTypeCode());
         
         if(isDelete){
