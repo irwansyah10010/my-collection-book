@@ -1,16 +1,18 @@
-POST http://localhost:8080/books/
+POST http://localhost:8080/mbc/books/
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyYyI6InNlIiwiaWQiOiIyNWRjZmQ3OC1jMGYyLTQ5NGEtYmU1MC0wYTk3MzY1YmFjMjgiLCJleHAiOjE3NTQ0NjQ4Mjl9.FrLgyV7PnwwSRH_7_FFlONiPYrmKBi8mymNOORFtItU
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyYyI6InNlIiwiZXhwIjoxNzU1MTcxNDQ0LCJ1c2VybmFtZSI6Imlyd2FuLmRldiJ9.4hA0wpMBlptVlveDaIbZR5MQo-8T3yIrpECT1C5mB8c
 
 {
-    "issbn":"ISB12234",
-    "title":"Atomic Habits 2",
+    "issbn":"ISB12236",
+    "title":"Atomic Habits 5",
     "numberOfPage":"700",
-    "synopsis":"Build Human Habit for someday",
-    "price":10.0,
+    "description":"Build Human Habit for someday",
+    "price":20.0,
     "publisher":"No",
     "authorName":"Now",
-    "bookType":{
-        "bookTypeCode":"adv"
-    }
+    "bookTypes":[
+        {
+            "bookTypeCode":"ADV"
+        }
+    ] 
 }
