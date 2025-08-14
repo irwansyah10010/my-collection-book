@@ -1,13 +1,13 @@
 package com.lawencon.readcollection.business.book.dto;
 
 public class BookDeleteReqDto {
-    private String id;
+    private String issbn;
 
-    public String getId() {
-        return id;
+    public String getIssbn() {
+        return issbn;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setIssbn(String issbn) {
+        this.issbn = issbn;
     }
 }

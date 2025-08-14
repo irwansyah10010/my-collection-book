@@ -1,6 +1,7 @@
 package com.lawencon.readcollection.business.book.dto;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
@@ -8,24 +9,26 @@ import com.lawencon.readcollection.business.booktype.dto.BookTypeInsertBookReqDt
 
 public class BookInsertReqDto {
     
-    @NotNull(message = "isbn is must required")
+    @NotNull(message = "issbn is must required")
     private String issbn;
 
     @NotNull(message = "title is must required")
     private String title;
 
-    @NotNull(message = "number of page is must required")
-    private Integer numberOfPage;
-    
-    private String synopsis;
-
-    private BigDecimal price;
-
     private String publisher;
 
     private String authorName;
 
-    private BookTypeInsertBookReqDto bookType;
+    @NotNull(message = "number of page is must required")
+    private Integer numberOfPage;
+    
+    private String description;
+
+    private BigDecimal price;
+
+    private Long releaseDate;
+
+    private List<BookTypeInsertBookReqDto> bookTypes;
 
     public String getIssbn() {
         return issbn;
@@ -49,14 +52,6 @@ public class BookInsertReqDto {
 
     public void setNumberOfPage(Integer numberOfPage) {
         this.numberOfPage = numberOfPage;
-    }
-
-    public String getSynopsis() {
-        return synopsis;
-    }
-
-    public void setSynopsis(String synopsis) {
-        this.synopsis = synopsis;
     }
 
     public BigDecimal getPrice() {
@@ -83,11 +78,28 @@ public class BookInsertReqDto {
         this.authorName = authorName;
     }
 
-    public BookTypeInsertBookReqDto getBookType() {
-        return bookType;
+    public String getDescription() {
+        return description;
     }
 
-    public void setBookType(BookTypeInsertBookReqDto bookType) {
-        this.bookType = bookType;
+    public void setDescription(String description) {
+        this.description = description;
     }
+
+    public Long getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(Long releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    public List<BookTypeInsertBookReqDto> getBookTypes() {
+        return bookTypes;
+    }
+
+    public void setBookTypes(List<BookTypeInsertBookReqDto> bookType) {
+        this.bookTypes = bookType;
+    }
+
 }

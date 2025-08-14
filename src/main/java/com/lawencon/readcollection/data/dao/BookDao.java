@@ -1,27 +1,78 @@
 package com.lawencon.readcollection.data.dao;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
-import com.lawencon.readcollection.data.model.Book;
-
 @Repository
 public class BookDao extends BaseDao{
+
+    // min book type
+    // subquery column or join book type detail
+    public Map<String, Object> findByIssbn(String issbn){
+
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT tb.issbn, tb.title, ts.status_name, tbcg.book_types, tb.number_of_page, tb.author_name, tb.publisher, tb.release_date ")
+        .append("FROM tb_book tb ")
+        .append("INNER JOIN tb_status ts ON tb.status_code = ts.status_code ")
+        .append("LEFT JOIN ( ")
+            .append("SELECT issbn, GROUP_CONCAT(book_type_name ORDER BY book_type_name SEPARATOR ', ') AS book_types ")
+            .append("FROM ( ")
+                .append("SELECT tb.issbn, book_type_name ")
+                .append("FROM tb_book tb ")
+                .append("RIGHT JOIN tb_book_type_book tbd ON tb.issbn = tbd.issbn ")
+                .append("INNER JOIN tb_book_type tbt ON tbt.book_type_code = tbd.book_type_code ")
+            .append(") tbc GROUP BY issbn ")
+        .append(") tbcg ON tb.issbn = tbcg.issbn ")
+        .append("WHERE tb.issbn=:issbn ");
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        try {
+            Object singleResult = getEM()
+                .createNativeQuery(sql.toString())
+                .setParameter("issbn", issbn)
+                .getSingleResult();;
+
+            
+            Object[] o = (Object[]) singleResult;
+            
+            result.put("issbn", o[0]);
+            result.put("title", o[1]);
+            result.put("statusName", o[2]);
+            result.put("category", o[3]);
+            result.put("page", o[4]);
+            result.put("authorName", o[5]);
+            result.put("publisher", o[6]);
+            result.put("releaseDate", o[7]);
+
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
 
     // min book type
     // subquery column or join book type detail
     public List<Map<String, Object>> findAll(Integer page, Integer data){
 
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT tb.isbn, tb.book_name, ts.status_name, tbt.book_type_name, tb.number_of_page ")
+        sql.append("SELECT tb.issbn, tb.title, ts.status_name, tbcg.book_types, tb.number_of_page ")
         .append("FROM tb_book tb ")
-        .append("INNER JOIN tb_status ts ON tb.status_id = ts.status_code ")
-        .append("LEFT JOIN tb_book_detail tbd ON tb.isbn = tbd.isbn ")
-        .append("INNER JOIN tb_book_type tbt ON tbt.book_type_code = tbd.book_type_code ")
+        .append("INNER JOIN tb_status ts ON tb.status_code = ts.status_code ")
+        .append("LEFT JOIN ( ")
+            .append("SELECT issbn, GROUP_CONCAT(book_type_name ORDER BY book_type_name SEPARATOR ', ') AS book_types ")
+            .append("FROM ( ")
+                .append("SELECT tb.issbn, book_type_name ")
+                .append("FROM tb_book tb ")
+                .append("RIGHT JOIN tb_book_type_book tbd ON tb.issbn = tbd.issbn ")
+                .append("INNER JOIN tb_book_type tbt ON tbt.book_type_code = tbd.book_type_code ")
+            .append(") tbc GROUP BY issbn ")
+        .append(") tbcg ON tb.issbn = tbcg.issbn ")
         .append("LIMIT :data OFFSET :offset ");
 
         List<Map<String, Object>> result = new LinkedList<>();
@@ -35,8 +86,8 @@ public class BookDao extends BaseDao{
             for (Object obj : resultList) {
                 Object[] o = (Object[]) obj;
                 
-                Map<String, Object> map = new HashMap<>();
-                map.put("isbn", o[0]);
+                Map<String, Object> map = new LinkedHashMap<>();
+                map.put("issbn", o[0]);
                 map.put("bookName", o[1]);
                 map.put("statusName", o[2]);
                 map.put("category", o[3]);
@@ -50,28 +101,25 @@ public class BookDao extends BaseDao{
         return result;
     }
 
-
     // min book type
     // subquery column or join book type detail
     public List<Map<String, Object>> findAll(Integer page, Integer data, String search){
 
-        /*
-         * SELECT book_type_name 
-         * FROM tb_book tb 
-         * RIGHT JOIN tb_book_detail tbd ON tb.isbn = tbd.isbn
-         * INNER JOIN tb_book_type tbt ON tbt.book_type_code = tbd..book_type_code
-         * WHERE tb.isbn = ?
-         */
-
         StringBuilder sql = new StringBuilder();
-        sql.append("SELECT tb.isbn, tb.book_name, ts.status_name, tb.status_name as book_type_name, tb.number_of_page ")
+        sql.append("SELECT tb.issbn, tb.title, ts.status_name, tbcg.book_types, tb.number_of_page ")
         .append("FROM tb_book tb ")
-        .append("INNER JOIN tb_status ts ON tb.status_id = ts.status_code ")
-        .append("LEFT JOIN tb_book_detail tbd ON tb.isbn = tbd.isbn ")
-        .append("INNER JOIN tb_book_type tbt ON tbt.book_type_code = tbd.book_type_code ")
-        .append("WHERE isbn like :search||'%' ")
-        .append("OR book_name like :search||'%' ")
-        .append("OR book_type_name like '%'||:search||'%' ")
+        .append("INNER JOIN tb_status ts ON tb.status_code = ts.status_code ")
+        .append("LEFT JOIN ( ")
+            .append("SELECT issbn, GROUP_CONCAT(book_type_name ORDER BY book_type_name SEPARATOR ', ') AS book_types ")
+            .append("FROM ( ")
+                .append("SELECT tb.issbn, book_type_name ")
+                .append("FROM tb_book tb ")
+                .append("RIGHT JOIN tb_book_type_book tbd ON tb.issbn = tbd.issbn ")
+                .append("INNER JOIN tb_book_type tbt ON tbt.book_type_code = tbd.book_type_code ")
+            .append(") tbc GROUP BY issbn ")
+        .append(") tbcg ON tb.issbn = tbcg.issbn ")
+        .append("WHERE issbn like :search||'%' ")
+        .append("OR title like :search||'%' ")
         .append("LIMIT :data OFFSET :offset ");
 
         List<Map<String, Object>> result = new LinkedList<>();
@@ -86,8 +134,8 @@ public class BookDao extends BaseDao{
             for (Object obj : resultList) {
                 Object[] o = (Object[]) obj;
                 
-                Map<String, Object> map = new HashMap<>();
-                map.put("isbn", o[0]);
+                Map<String, Object> map = new LinkedHashMap<>();
+                map.put("issbn", o[0]);
                 map.put("bookName", o[1]);
                 map.put("statusName", o[2]);
                 map.put("category", o[3]);
@@ -101,16 +149,16 @@ public class BookDao extends BaseDao{
         return result;
     }
 
-    @SuppressWarnings("unchecked")
-    public List<Book> getByBookTypeId(String bookTypeId){
-        StringBuilder sql = new StringBuilder();
+    // @SuppressWarnings("unchecked")
+    // public List<Book> getByBookTypeId(String bookTypeId){
+    //     StringBuilder sql = new StringBuilder();
 
-        sql.append("SELECT * FROM tb_book WHERE book_type_id = :bookTypeId");
+    //     sql.append("SELECT * FROM tb_book WHERE book_type_id = :bookTypeId");
 
-        List<Book> lists = getEM().createNativeQuery(sql.toString(),Book.class)
-        .setParameter("bookTypeId", bookTypeId)
-        .getResultList();
+    //     List<Book> lists = getEM().createNativeQuery(sql.toString(),Book.class)
+    //     .setParameter("bookTypeId", bookTypeId)
+    //     .getResultList();
 
-        return lists;
-    }
+    //     return lists;
+    // }
 }

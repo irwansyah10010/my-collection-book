@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 import com.lawencon.readcollection.data.model.BookType;
 
-public class BookSingleResDto extends BookListResDataDto{
+public class BookSingleResDto{
     
     private String synopsis;
     private String author;

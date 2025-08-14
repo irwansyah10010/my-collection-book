@@ -1,9 +1,7 @@
 package com.lawencon.readcollection.business.book.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
@@ -11,22 +9,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.lawencon.readcollection.base.constant.Message;
-import com.lawencon.readcollection.base.dto.req.BaseInsertResDto;
-import com.lawencon.readcollection.base.dto.req.BaseResListDto;
-import com.lawencon.readcollection.base.dto.req.BaseResSingleDto;
-import com.lawencon.readcollection.base.dto.req.BaseUpdateAndDeleteResDto;
+import com.lawencon.readcollection.base.dto.res.BaseInsertResDto;
+import com.lawencon.readcollection.base.dto.res.BaseResListDto;
+import com.lawencon.readcollection.base.dto.res.BaseResSingleDto;
+import com.lawencon.readcollection.base.dto.res.BaseUpdateAndDeleteResDto;
 import com.lawencon.readcollection.business.book.dto.BookDeleteReqDto;
 import com.lawencon.readcollection.business.book.dto.BookInsertReqDto;
-import com.lawencon.readcollection.business.book.dto.BookListResDataDto;
 import com.lawencon.readcollection.business.book.dto.BookSingleResDto;
+import com.lawencon.readcollection.business.book.dto.BookTypeInsertReqDto;
 import com.lawencon.readcollection.business.book.dto.BookUpdateReqDto;
 import com.lawencon.readcollection.business.book.dto.BookUpdateStatusReqDto;
+import com.lawencon.readcollection.business.booktype.dto.BookTypeInsertBookReqDto;
 import com.lawencon.readcollection.data.dao.BookDao;
+import com.lawencon.readcollection.data.dao.BookTypeBookDao;
 import com.lawencon.readcollection.data.dao.BookTypeDao;
 import com.lawencon.readcollection.data.dao.ReadBookDao;
 import com.lawencon.readcollection.data.dao.StatusDao;
 import com.lawencon.readcollection.data.model.Book;
 import com.lawencon.readcollection.data.model.BookType;
+import com.lawencon.readcollection.data.model.BookTypeBook;
 import com.lawencon.readcollection.data.model.ReadBook;
 import com.lawencon.readcollection.data.model.Status;
 
@@ -42,141 +43,9 @@ public class BookService {
     @Autowired
     private BookTypeDao bookTypeDao;
 
-    // @Autowired
-    // private ReadBookDao readBookDao;
-
-    // @Transactional(rollbackOn = Exception.class)
-    // public BaseInsertResDto save(BookInsertReqDto bookInsertReqDto){
-    //     BaseInsertResDto baseInsertResDto = new BaseInsertResDto();
-
-    //     BookType bookType = bookTypeDao.findByBookTypeCode(bookInsertReqDto.getBookType().getBookTypeCode());
-
-    //     if(bookType != null){
-    //         Book book = new Book();
-    //         Status status = statusDao.getByStatusCode("N");
-        
-    //         book.setIssbn(bookInsertReqDto.getIssbn());
-    //         book.setTitle(bookInsertReqDto.getTitle());
-    //         book.setNumberOfPage(bookInsertReqDto.getNumberOfPage());
+    @Autowired
+    private BookTypeBookDao bookTypeBookDao;
     
-    //         book.setSynopsis(bookInsertReqDto.getSynopsis());
-    //         book.setPrice(bookInsertReqDto.getPrice());
-    //         book.setStatus(status);
-    //         book.setPublisher(bookInsertReqDto.getPublisher());
-    //         book.setAuthorName(bookInsertReqDto.getAuthorName());
-
-    //         book.setBookType(bookType);
-
-    //         Book bookInsert = bookDao.save(book);
-
-    //         if(bookInsert != null){
-    //             baseInsertResDto.setId(bookInsert.getId());
-    //             baseInsertResDto.setMessage(Message.SUCCESS_SAVE.getMessage());
-    //         }else{
-    //             baseInsertResDto.setMessage(Message.FAILED_SAVE.getMessage());
-    //         }
-    //     }else{
-    //         baseInsertResDto.setMessage(Message.FAILED_SAVE.getMessage()+", Book Type isnt available");
-    //     }
-
-    //     return baseInsertResDto;
-    // }
-
-    // @Transactional(rollbackOn = Exception.class)
-    // public BaseUpdateAndDeleteResDto update(BookUpdateReqDto bookUpdateReqDto){
-    //     BaseUpdateAndDeleteResDto baseUpdateResDto = new BaseUpdateAndDeleteResDto();
-
-    //     Book book = bookDao.findById(Book.class, bookUpdateReqDto.getId());
-
-    //     if(book != null){
-
-    //         if(bookUpdateReqDto.getTitle() != null){
-    //             book.setTitle(bookUpdateReqDto.getTitle());
-    //         }
-
-    //         if(bookUpdateReqDto.getNumberOfPage() != null){
-    //             book.setNumberOfPage(bookUpdateReqDto.getNumberOfPage());
-    //         }
-
-    //         if(bookUpdateReqDto.getNumberOfPage() != null){
-    //             book.setSynopsis(bookUpdateReqDto.getSynopsis());
-    //         }
-
-    //         if(bookUpdateReqDto.getPrice() != null){
-    //             book.setPrice(bookUpdateReqDto.getPrice());
-    //         }
-
-    //         if(bookUpdateReqDto.getPublisher() != null){
-    //             book.setPublisher(bookUpdateReqDto.getPublisher());
-    //         }
-
-    //         if(bookUpdateReqDto.getAuthorName() != null){
-    //             book.setAuthorName(bookUpdateReqDto.getAuthorName());
-    //         }
-
-    //         Book bookUpdate = bookDao.update(book);
-
-    //         if(bookUpdate != null){   
-    //             baseUpdateResDto.setMessage(Message.SUCCESS_UPDATE.getMessage());
-    //         }else{
-    //             baseUpdateResDto.setMessage(Message.FAILED_UPDATE.getMessage());
-    //         }
-    //     }else{
-    //         baseUpdateResDto.setMessage(Message.FAILED_UPDATE.getMessage());
-    //     }
-
-    //     return baseUpdateResDto;
-    // }
-
-    // @Transactional(rollbackOn = Exception.class)
-    // public BaseUpdateAndDeleteResDto updateStatus(BookUpdateStatusReqDto bookUpdateStatusReqDto){
-    //     BaseUpdateAndDeleteResDto baseUpdateResDto = new BaseUpdateAndDeleteResDto();
-
-    //     Book book = bookDao.findById(Book.class, bookUpdateStatusReqDto.getId());
-
-    //     Status status = statusDao.getByStatusCode(bookUpdateStatusReqDto.getStatusCode());
-
-    //     if(book != null){
-
-    //         book.setStatus(status);
-
-    //         Book bookUpdate = bookDao.update(book);
-
-    //         if(bookUpdate != null){
-    //             baseUpdateResDto.setMessage(Message.SUCCESS_UPDATE.getMessage());
-    //         }else{
-    //             baseUpdateResDto.setMessage(Message.FAILED_UPDATE.getMessage());
-    //         }
-    //     }else{
-    //         baseUpdateResDto.setMessage(Message.FAILED_UPDATE.getMessage());
-    //     }
-
-    //     return baseUpdateResDto;
-    // }
-
-    // @Transactional(rollbackOn = Exception.class)
-    // public BaseUpdateAndDeleteResDto delete(BookDeleteReqDto bookDeleteReqDto){
-    //     BaseUpdateAndDeleteResDto baseDeleteResDto = new BaseUpdateAndDeleteResDto();
-
-    //     BookType book = bookDao.findById(BookType.class, bookDeleteReqDto.getId());
-
-    //     if(book != null){
-
-    //         // delete book
-    //         bookTypeDao.delete("tb_read_book", "book_id", bookDeleteReqDto.getId());
-            
-    //         Boolean isDeleteBookType = bookTypeDao.delete("tb_book", "id", bookDeleteReqDto.getId());
-
-    //         if(isDeleteBookType){
-    //             baseDeleteResDto.setMessage(Message.SUCCESS_UPDATE.getMessage()+"(data relation a book, deleted)");    
-    //         }
-    //     }else{
-    //         baseDeleteResDto.setMessage(Message.FAILED_UPDATE.getMessage());
-    //     }
-
-    //     return baseDeleteResDto;
-    // }
-
     public BaseResListDto<Map<String, Object>> getAll(Integer page, Integer limit){
         List<Map<String,Object>> all = bookDao.findAll(page, limit);
 
@@ -187,6 +56,15 @@ public class BookService {
         baseResListDto.setPage(page);
 
         return baseResListDto;
+    }
+
+    public BaseResSingleDto<?> getByIssbn(String issbn){
+        Map<String, Object> byIssbn = bookDao.findByIssbn(issbn);
+
+        BaseResSingleDto<Map<String,Object>> baseResSingleRes = new BaseResSingleDto<>();
+        baseResSingleRes.setData(byIssbn);
+
+        return baseResSingleRes;
     }
 
     public BaseResListDto<Map<String, Object>> getAll(Integer page, Integer limit, String search){
@@ -201,33 +79,186 @@ public class BookService {
         return baseResListDto;
     }
 
-    // public BaseResSingleDto<BookSingleResDto> getById(String id){
-    //     BaseResSingleDto<BookSingleResDto> baseResSingleDto = new BaseResSingleDto<>();
+    @Transactional(rollbackOn = Exception.class)
+    public BaseInsertResDto add(BookInsertReqDto bookInsertReqDto){
+        BaseInsertResDto baseInsertResDto = new BaseInsertResDto();
 
-    //     Book book = bookDao.findById(Book.class, id);
+        // save book
+        Book book = new Book();
+        Status status = statusDao.findByPK(Status.class,"N");
+    
+        book.setIssbn(bookInsertReqDto.getIssbn());
+        book.setTitle(bookInsertReqDto.getTitle());
+        book.setNumberOfPage(bookInsertReqDto.getNumberOfPage());
+        book.setDescription(bookInsertReqDto.getDescription());
+        book.setPrice(bookInsertReqDto.getPrice());
+        book.setStatus(status);
+        book.setPublisher(bookInsertReqDto.getPublisher());
+        book.setAuthorName(bookInsertReqDto.getAuthorName());
+        book.setReleaseDate(System.currentTimeMillis());  // dummy
+        Book bookInsert = bookDao.save(book); // save book
 
-    //     if(book != null){
-    //         BookSingleResDto bookSingleResDataDto = new BookSingleResDto();
+        if(bookInsert != null){
+
+            // get book type
+            for (BookTypeInsertBookReqDto bookType : bookInsertReqDto.getBookTypes()) {
+                BookType bt = bookTypeDao.findByPK(BookType.class,bookType.getBookTypeCode());
+
+                // book type and book
+                BookTypeBook bookTypeBook = new BookTypeBook();
+                bookTypeBook.setBook(bookInsert);
+                bookTypeBook.setBookType(bt);
+
+                BookTypeBook bookTypeBookSave = bookTypeBookDao.save(bookTypeBook);
+
+                if(bookTypeBookSave == null){
+                    throw new RuntimeException("Failed to add book type");
+                }
+            }
+
+            //
+            baseInsertResDto.setId(bookInsert.getIssbn());
+            baseInsertResDto.setMessage(Message.SUCCESS_SAVE.getMessage());
+        }else{
+            throw new RuntimeException("Failed to save book");
+        }
+        
+        return baseInsertResDto;
+    }
+
+    @Transactional(rollbackOn = Exception.class)
+    public BaseInsertResDto addBookTypResDto(BookTypeInsertReqDto bookTypeInsertReqDto){
+        BaseInsertResDto baseInsertResDto = new BaseInsertResDto();
+
+        // init book and book type
+        Book book = bookDao.findByPK(Book.class, bookTypeInsertReqDto.getIssbn());
+        BookType bookType = bookTypeDao.findByPK(BookType.class, bookTypeInsertReqDto.getBookTypeCode());
+
+        if(book != null || bookType != null){
+            // set book type and book
+            BookTypeBook bookTypeBook = new BookTypeBook();
+            bookTypeBook.setBook(book);
+            bookTypeBook.setBookType(bookType);
+
+            BookTypeBook bookTypeBookSave = bookTypeBookDao.save(bookTypeBook);
+
+            if(bookTypeBookSave == null){
+                throw new RuntimeException("Failed to add book type");
+            }else{
+                //
+                baseInsertResDto.setId(bookTypeBookSave.getId());
+                baseInsertResDto.setMessage(Message.SUCCESS_SAVE.getMessage());
+            }
+        }else{
+            baseInsertResDto.setMessage("Failed to add");
+        }
+        
+        return baseInsertResDto;
+    }
+
+    @Transactional(rollbackOn = Exception.class)
+    public BaseUpdateAndDeleteResDto update(BookUpdateReqDto bookUpdateReqDto){
+        BaseUpdateAndDeleteResDto baseUpdateResDto = new BaseUpdateAndDeleteResDto();
+
+        Book book = bookDao.findByUpdate(Book.class, bookUpdateReqDto.getIssbn());
+
+        if(book != null){
+
+            if(bookUpdateReqDto.getTitle() != null){
+                book.setTitle(bookUpdateReqDto.getTitle());
+            }
+
+            if(bookUpdateReqDto.getNumberOfPage() != null){
+                book.setNumberOfPage(bookUpdateReqDto.getNumberOfPage());
+            }
+
+            if(bookUpdateReqDto.getDescription() != null){
+                book.setDescription(bookUpdateReqDto.getDescription());
+            }
+
+            if(bookUpdateReqDto.getPrice() != null){
+                book.setPrice(bookUpdateReqDto.getPrice());
+            }
+
+            if(bookUpdateReqDto.getPublisher() != null){
+                book.setPublisher(bookUpdateReqDto.getPublisher());
+            }
+
+            if(bookUpdateReqDto.getAuthorName() != null){
+                book.setAuthorName(bookUpdateReqDto.getAuthorName());
+            }
+
+            //
+            baseUpdateResDto.setMessage(Message.SUCCESS_UPDATE.getMessage());
+        }else{
+            baseUpdateResDto.setMessage(Message.FAILED_UPDATE.getMessage());
+        }
+
+        return baseUpdateResDto;
+    }
+
+    @Transactional(rollbackOn = Exception.class)
+    public BaseUpdateAndDeleteResDto updateStatus(BookUpdateStatusReqDto bookUpdateStatusReqDto){
+        BaseUpdateAndDeleteResDto baseUpdateResDto = new BaseUpdateAndDeleteResDto();
+
+        Book book = bookDao.findByUpdate(Book.class, bookUpdateStatusReqDto.getId());
+
+        if(book != null){
+
+            if(!book.getStatus().getStatusCode().equals(bookUpdateStatusReqDto.getStatusCode())){
+                Status status = statusDao.findByPK(Status.class, bookUpdateStatusReqDto.getStatusCode());
+    
+                book.setStatus(status);
+    
+                baseUpdateResDto.setMessage(Message.SUCCESS_UPDATE.getMessage());
+            }else{
+                baseUpdateResDto.setMessage("Status code is equal");    
+            }
+        }else{
+            baseUpdateResDto.setMessage(Message.FAILED_UPDATE.getMessage());
+        }
+
+        return baseUpdateResDto;
+    }
+
+    // min read and book type
+    @Transactional(rollbackOn = Exception.class)
+    public BaseUpdateAndDeleteResDto delete(BookDeleteReqDto bookDeleteReqDto){
+        BaseUpdateAndDeleteResDto baseDeleteResDto = new BaseUpdateAndDeleteResDto();
+
+        BookType book = bookDao.findByPK(BookType.class, bookDeleteReqDto.getIssbn());
+
+        if(book != null){
+
+            // delete read_book by issbn
+            Boolean isDeleteReadBook = true;
+            if(isDeleteReadBook){
+                // delete book_type_book by issbn
+                Boolean isDeleteBookTypeBook = true;
+                if(isDeleteBookTypeBook){
+                    // delete book by issbn
+                    Boolean isDeleteBook = bookTypeDao.delete(Book.class, "issbn", bookDeleteReqDto.getIssbn());
+
+                    if(isDeleteBook){
+                        baseDeleteResDto.setMessage(Message.SUCCESS_UPDATE.getMessage()+"(data relation a book, deleted)");    
+                    }else{
+                        throw new RuntimeException("book failed delete");      
+                    }
+                }else{
+                   throw new RuntimeException("book type failed delete"); 
+                }
+                
+            }else{
+                throw new RuntimeException("Read book failed");
+            }
+
+        }else{
+            baseDeleteResDto.setMessage("No book available");
+        }
+
+        return baseDeleteResDto;
+    }
 
 
-    //         bookSingleResDataDto.setId(book.getId());
-    //         bookSingleResDataDto.setTitle(book.getTitle());
-    //         bookSingleResDataDto.setStatus(book.getStatus());
-    //         bookSingleResDataDto.setNumberOfPage(book.getNumberOfPage());
-            
-    //         bookSingleResDataDto.setSynopsis(book.getSynopsis());
-    //         bookSingleResDataDto.setAuthor(id);
-    //         bookSingleResDataDto.setPublisher(book.getPublisher());
-    //         bookSingleResDataDto.setBookType(book.getBookType());
-    //         bookSingleResDataDto.setPrice(book.getPrice());
-
-    //         List<ReadBook> readBooks = readBookDao.getByBookId(book.getId());
-    //         bookSingleResDataDto.setReadBooks(readBooks);
-            
-    //         baseResSingleDto.setData(bookSingleResDataDto);
-    //     }
-
-    //     return baseResSingleDto;
-    // }
     
 }

@@ -34,6 +34,9 @@ public class Book {
     @Column(name = "author_name",nullable = false,length = 20)
     private String authorName;
 
+    @Column(name="release_date")
+    private Long releaseDate;
+
     @ManyToOne
     @JoinColumn(name = "status_code",columnDefinition = "VARCHAR(36)")
     private Status status;
@@ -103,12 +106,14 @@ public class Book {
         this.authorName = authorName;
     }
 
-    // public List<ReadBook> getReadBooks() {
-    //     return readBooks;
-    // }
+    public Long getReleaseDate() {
+        return releaseDate;
+    }
 
-    // public void setReadBooks(List<ReadBook> readBooks) {
-    //     this.readBooks = readBooks;
-    // }
+    public void setReleaseDate(Long releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
+    
 
 }

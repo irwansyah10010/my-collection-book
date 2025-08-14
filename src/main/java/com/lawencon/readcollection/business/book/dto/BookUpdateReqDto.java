@@ -6,28 +6,20 @@ import javax.validation.constraints.NotNull;
 
 public class BookUpdateReqDto {
     
-    @NotNull(message = "id is must required")
-    private String id;
+    @NotNull(message = "issbn is must required")
+    private String issbn;
 
     private String title;
 
     private Integer numberOfPage;
     
-    private String synopsis;
+    private String description;
 
     private BigDecimal price;
 
     private String publisher;
 
     private String authorName;
-
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;
@@ -43,14 +35,6 @@ public class BookUpdateReqDto {
 
     public void setNumberOfPage(Integer numberOfPage) {
         this.numberOfPage = numberOfPage;
-    }
-
-    public String getSynopsis() {
-        return synopsis;
-    }
-
-    public void setSynopsis(String synopsis) {
-        this.synopsis = synopsis;
     }
 
     public BigDecimal getPrice() {
@@ -77,7 +61,23 @@ public class BookUpdateReqDto {
         this.authorName = authorName;
     }
 
+    public String getDescription() {
+        return description;
+    }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getIssbn() {
+        return issbn;
+    }
+
+    public void setIssbn(String issbn) {
+        this.issbn = issbn;
+    }
+
+    
     
 
 }
