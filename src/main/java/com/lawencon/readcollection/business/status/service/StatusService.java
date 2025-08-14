@@ -1,6 +1,6 @@
 package com.lawencon.readcollection.business.status.service;
 
-import com.lawencon.readcollection.base.dto.req.BaseResListDto;
+import com.lawencon.readcollection.base.dto.res.BaseResListDto;
 import com.lawencon.readcollection.data.dao.StatusDao;
 import com.lawencon.readcollection.data.model.Status;
 

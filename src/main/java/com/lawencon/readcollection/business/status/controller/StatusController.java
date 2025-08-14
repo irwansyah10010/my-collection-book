@@ -1,6 +1,6 @@
 package com.lawencon.readcollection.business.status.controller;
 
-import com.lawencon.readcollection.base.dto.req.BaseResListDto;
+import com.lawencon.readcollection.base.dto.res.BaseResListDto;
 import com.lawencon.readcollection.business.status.service.StatusService;
 
 import org.springframework.beans.factory.annotation.Autowired;
