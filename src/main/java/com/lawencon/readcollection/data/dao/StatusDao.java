@@ -2,6 +2,7 @@ package com.lawencon.readcollection.data.dao;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ public class StatusDao extends BaseDao{
         sql.append("SELECT * FROM ")
         .append("tb_status ");
 
-        List<Map<String, Object>> result = new ArrayList<>();
+        List<Map<String, Object>> result = new LinkedList<>();
         try {
             List<?> resultList = getEM()
                 .createNativeQuery(sql.toString())
