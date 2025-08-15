@@ -1,6 +1,8 @@
 package com.lawencon.readcollection.data.dao;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -124,6 +126,41 @@ public abstract class BaseDao {
         
         sql.append("SELECT count(*) FROM ")
         .append(name);
+
+        Integer countOfData = 0;
+
+        Object obj = null;
+
+        try {
+            obj = getEM().createNativeQuery(sql.toString()).getSingleResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if(obj != null){
+            countOfData = Integer.parseInt(obj.toString());
+        }
+
+        return countOfData;
+    }
+
+    public Integer count(Class<?> clazz, Map<String, Object> where){
+        StringBuilder sql = new StringBuilder();
+
+        String name = "NONE";
+        if (clazz.isAnnotationPresent(Table.class)) {
+            Table table = clazz.getAnnotation(Table.class);
+            name = table.name();
+        }
+        
+        sql.append("SELECT count(*) FROM ")
+        .append(name)
+        .append(" WHERE 1=1");
+
+        for (Entry<String, Object> w : where.entrySet()) {
+            sql.append(" AND ")
+            .append(w.getKey()).append("=").append(w.getValue());
+        }
 
         Integer countOfData = 0;
 
