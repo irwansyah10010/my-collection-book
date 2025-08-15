@@ -5,11 +5,12 @@ import javax.validation.constraints.NotNull;
 
 public class BookTypeInsertReqDto {
     
-    @NotNull(message = "code is must required")
+    @NotNull(message = "book type code is must required")
+    @NotBlank(message = "book type code isn't only whitespace")
     private String bookTypeCode;
 
     @NotNull(message = "book type name is must required")
-    @NotBlank(message = "book type name isnt only whitespace")
+    @NotBlank(message = "book type name isn't only whitespace")
     private String bookTypeName;
 
     public String getBookTypeCode() {

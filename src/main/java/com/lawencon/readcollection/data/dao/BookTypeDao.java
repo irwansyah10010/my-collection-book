@@ -2,6 +2,7 @@ package com.lawencon.readcollection.data.dao;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Repository;
 
@@ -24,5 +25,9 @@ public class BookTypeDao extends BaseDao{
         }
 
         return result;
+    }
+
+    public Boolean existByBookTypeCode(String issbn){
+        return count(BookType.class, Map.of("book_type_code", issbn)) > 0;
     }
 }

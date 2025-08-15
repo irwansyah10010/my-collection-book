@@ -2,6 +2,8 @@ package com.lawencon.readcollection.business.booktype.controller;
 
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +39,7 @@ public class BookTypeController {
     }
 
     @PostMapping
-    public ResponseEntity<BaseInsertResDto> save(@RequestBody BookTypeInsertReqDto bookTypeInsertReqDto){
+    public ResponseEntity<BaseInsertResDto> save(@Valid @RequestBody BookTypeInsertReqDto bookTypeInsertReqDto){
         BaseInsertResDto baseInsertResDto = bookTypeService.save(bookTypeInsertReqDto);
 
         return new ResponseEntity<>(baseInsertResDto, HttpStatus.CREATED);
@@ -45,7 +47,7 @@ public class BookTypeController {
 
 
     @PutMapping
-    public ResponseEntity<BaseUpdateAndDeleteResDto> update(@RequestBody BookTypeUpdateReqDto bookTypeUpdateReqDto){
+    public ResponseEntity<BaseUpdateAndDeleteResDto> update(@Valid @RequestBody BookTypeUpdateReqDto bookTypeUpdateReqDto){
         BaseUpdateAndDeleteResDto baseUpdateResDto = bookTypeService.update(bookTypeUpdateReqDto);
 
         return new ResponseEntity<>(baseUpdateResDto, HttpStatus.OK);
