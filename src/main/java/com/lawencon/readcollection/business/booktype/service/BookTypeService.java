@@ -6,9 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BeanPropertyBindingResult;
-import org.springframework.validation.BindException;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.lawencon.readcollection.base.constant.Message;
@@ -44,7 +41,7 @@ public class BookTypeService {
     /**
      * add new book type
      * 
-     * validation - request forbidden (400):
+     * validation - request forbidden (400)
      * - book type code is require: v
      * - book type name is require: v
      * - book type name is not blank: v
@@ -61,7 +58,7 @@ public class BookTypeService {
         BookType bookType = new BookType();
 
         // check duplicate data
-        if(!bookTypeDao.existByBookTypeCode(bookTypeReqDto.getBookTypeCode())){
+        if(!bookTypeDao.isExistByBookTypeCode(bookTypeReqDto.getBookTypeCode())){
             BeanPropertyBindingResult bindingResult =
                 new BeanPropertyBindingResult(bookTypeReqDto, "bookTypeReqDto");
             bindingResult.rejectValue("bookTypeCode", "duplicate", "Book type code already exists");
@@ -88,13 +85,13 @@ public class BookTypeService {
     /**
      * update book type
      * 
-     * validation - request forbidden (400):
+     * validation - request forbidden (400)
      * - book type code is require: v
      * - book type name is require: v
      * - book type name is not blank: v
      *
      * - book type isn't available: v
-     * - book type isn't change: o
+     * - request book type isn't change: v
      * 
      * @param bookTypeReqDto
      * @return
@@ -102,6 +99,9 @@ public class BookTypeService {
     @Transactional(rollbackOn = Exception.class)
     public BaseUpdateAndDeleteResDto update(BookTypeUpdateReqDto bookTypeUpdateReqDto){
         BaseUpdateAndDeleteResDto baseUpdateResDto = new BaseUpdateAndDeleteResDto();
+
+        if(bookTypeDao.isChangeByAllRequest(bookTypeUpdateReqDto.getBookTypeCode(), bookTypeUpdateReqDto.getBookTypeName()))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request book type isn't change");
 
         BookType bookType = bookTypeDao.findByUpdate(BookType.class, bookTypeUpdateReqDto.getBookTypeCode());
 
@@ -120,9 +120,9 @@ public class BookTypeService {
     /**
      * delete book type
      * 
-     * validation - request forbidden (400):
+     * validation - request forbidden (400)
      * - book type isn't available: v
-     * - book type still available on book: o
+     * - book type still available on book: v
      * 
      * @param bookTypeReqDto
      * @return
@@ -131,11 +131,13 @@ public class BookTypeService {
     public BaseUpdateAndDeleteResDto delete(BookTypeDeleteReqDto bookTypeDeleteReqDto){
         BaseUpdateAndDeleteResDto baseUpdateResDto = new BaseUpdateAndDeleteResDto();
 
-        // check data isn't available
-        if(!bookTypeDao.existByBookTypeCode(bookTypeDeleteReqDto.getBookTypeCode()))
+        // check data type isn't available
+        if(!bookTypeDao.isExistByBookTypeCode(bookTypeDeleteReqDto.getBookTypeCode()))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Book type isn't available");
         
-        // delete book
+        // check book
+        if(bookTypeDao.isExistOfBookTypeFK(bookTypeDeleteReqDto.getBookTypeCode()))
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Book type still available on book");
 
         // delete book type
         Boolean isDelete = bookTypeDao.delete(BookType.class, "book_type_code", bookTypeDeleteReqDto.getBookTypeCode());

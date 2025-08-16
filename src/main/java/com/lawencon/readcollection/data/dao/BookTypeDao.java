@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.stereotype.Repository;
 
 import com.lawencon.readcollection.data.model.BookType;
+import com.lawencon.readcollection.data.model.BookTypeBook;
 
 @Repository
 public class BookTypeDao extends BaseDao{
@@ -27,7 +28,25 @@ public class BookTypeDao extends BaseDao{
         return result;
     }
 
-    public Boolean existByBookTypeCode(String issbn){
-        return count(BookType.class, Map.of("book_type_code", issbn)) > 0;
+    public Boolean isExistByBookTypeCode(String bookTypeCode){
+        return count(BookType.class, Map.of("book_type_code", bookTypeCode)) > 0;
+    }
+
+    public Boolean isChangeByAllRequest(String bookTypeCode, String bookTypeName){
+        return count(BookType.class,
+            Map.of(
+                "book_type_code", bookTypeCode,
+                "book_type_name", bookTypeName
+            )
+        ) > 0;
+    }
+
+    // book type book mine
+    public Boolean isExistOfBookTypeFK(String bookCodeType){
+        return count(BookTypeBook.class,
+            Map.of(
+                "book_type_code", bookCodeType
+            )
+        ) > 0;
     }
 }
