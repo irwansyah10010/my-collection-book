@@ -21,7 +21,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<BaseInsertResDto> handleRuntimeException(RuntimeException ex) {
         BaseInsertResDto res = new BaseInsertResDto();
-        res.setMessage(ex.getMessage()); // pesan dari service
+        ex.printStackTrace();
+        res.setMessage("Technical Error"); // pesan dari service
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
     }
 
@@ -54,7 +55,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(res);
     }
 
-    // data isn't available
+    // about data
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<?> handleBindException(ResponseStatusException ex) {
         BaseInsertResDto res = new BaseInsertResDto();

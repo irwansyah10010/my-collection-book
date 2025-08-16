@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.Table;
 
 public abstract class BaseDao {
@@ -159,7 +160,8 @@ public abstract class BaseDao {
 
         for (Entry<String, Object> w : where.entrySet()) {
             sql.append(" AND ")
-            .append(w.getKey()).append("=").append(w.getValue());
+            .append(w.getKey()).append("=")
+            .append(" :").append(w.getKey());
         }
 
         Integer countOfData = 0;
@@ -167,7 +169,17 @@ public abstract class BaseDao {
         Object obj = null;
 
         try {
-            obj = getEM().createNativeQuery(sql.toString()).getSingleResult();
+
+            Query nativeQuery = getEM()
+                            .createNativeQuery(sql.toString());
+
+            // set parameter
+            for (Entry<String, Object> w : where.entrySet()) {
+                nativeQuery.setParameter(w.getKey(), w.getValue());
+            }
+                
+            obj = nativeQuery.getSingleResult();
+
         } catch (Exception e) {
             e.printStackTrace();
         }
