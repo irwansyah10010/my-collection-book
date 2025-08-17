@@ -1,18 +1,22 @@
 package com.lawencon.readcollection.business.book.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.lawencon.readcollection.business.booktype.dto.BookTypeInsertBookReqDto;
 
 public class BookInsertReqDto {
     
-    @NotNull(message = "issbn is must required")
+    @NotNull(message = "Issbn is must required")
+    @NotBlank(message = "issbn isn't only whitespace")
     private String issbn;
 
     @NotNull(message = "title is must required")
+    @NotBlank(message = "title isn't only whitespace")
     private String title;
 
     private String publisher;
@@ -26,7 +30,7 @@ public class BookInsertReqDto {
 
     private BigDecimal price;
 
-    private Long releaseDate;
+    private LocalDate releaseDate;
 
     private List<BookTypeInsertBookReqDto> bookTypes;
 
@@ -86,20 +90,20 @@ public class BookInsertReqDto {
         this.description = description;
     }
 
-    public Long getReleaseDate() {
-        return releaseDate;
-    }
-
-    public void setReleaseDate(Long releaseDate) {
-        this.releaseDate = releaseDate;
-    }
-
     public List<BookTypeInsertBookReqDto> getBookTypes() {
         return bookTypes;
     }
 
     public void setBookTypes(List<BookTypeInsertBookReqDto> bookType) {
         this.bookTypes = bookType;
+    }
+
+    public LocalDate getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(LocalDate releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
 }

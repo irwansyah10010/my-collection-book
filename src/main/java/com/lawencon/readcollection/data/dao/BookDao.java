@@ -1,17 +1,22 @@
 package com.lawencon.readcollection.data.dao;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.LocalDate;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.stereotype.Repository;
+import com.lawencon.readcollection.data.model.Book;
+import com.lawencon.readcollection.data.model.BookTypeBook;
+import com.lawencon.readcollection.util.DatetimeUtil;
 
 @Repository
 public class BookDao extends BaseDao{
 
-    // min book type
-    // subquery column or join book type detail
+    
     public Map<String, Object> findByIssbn(String issbn){
 
         StringBuilder sql = new StringBuilder();
@@ -46,7 +51,7 @@ public class BookDao extends BaseDao{
             result.put("page", o[4]);
             result.put("authorName", o[5]);
             result.put("publisher", o[6]);
-            result.put("releaseDate", o[7]);
+            result.put("releaseDate", DatetimeUtil.epochMillisToLocalDate(((BigInteger) o[7]).longValue()));
 
         }catch(Exception e){
             e.printStackTrace();
@@ -56,8 +61,7 @@ public class BookDao extends BaseDao{
     }
 
 
-    // min book type
-    // subquery column or join book type detail
+    
     public List<Map<String, Object>> findAll(Integer page, Integer data){
 
         StringBuilder sql = new StringBuilder();
@@ -101,8 +105,7 @@ public class BookDao extends BaseDao{
         return result;
     }
 
-    // min book type
-    // subquery column or join book type detail
+    
     public List<Map<String, Object>> findAll(Integer page, Integer data, String search){
 
         StringBuilder sql = new StringBuilder();
@@ -149,16 +152,32 @@ public class BookDao extends BaseDao{
         return result;
     }
 
-    // @SuppressWarnings("unchecked")
-    // public List<Book> getByBookTypeId(String bookTypeId){
-    //     StringBuilder sql = new StringBuilder();
+    public boolean isExistBook(String issbn){
+        return count(Book.class, Map.of("issbn", issbn)) > 0;
+    }
 
-    //     sql.append("SELECT * FROM tb_book WHERE book_type_id = :bookTypeId");
 
-    //     List<Book> lists = getEM().createNativeQuery(sql.toString(),Book.class)
-    //     .setParameter("bookTypeId", bookTypeId)
-    //     .getResultList();
+    public Boolean isChangeByAllRequest(String issbn, String title, Integer numberOfPage, String description, BigDecimal price, String publisher, String authorName, LocalDate releaseDate){
+        return count(Book.class,
+            Map.of(
+                "issbn", issbn,
+                "title", title,
+                "number_of_page", numberOfPage,
+                "description", description,
+                "price", price,
+                "publisher",publisher,
+                "author_name",authorName,
+                "release_date", DatetimeUtil.localDateToEpochMilli(releaseDate)
+            )
+        ) > 0;
+    }
 
-    //     return lists;
-    // }
+
+    public Boolean isExistOfBookFK(String issbn){
+        return count(BookTypeBook.class,
+            Map.of(
+                "issbn", issbn
+            )
+        ) > 0;
+    }
 }

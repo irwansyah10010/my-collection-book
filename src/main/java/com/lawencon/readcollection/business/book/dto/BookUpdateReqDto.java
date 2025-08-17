@@ -1,16 +1,22 @@
 package com.lawencon.readcollection.business.book.dto;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class BookUpdateReqDto {
     
     @NotNull(message = "issbn is must required")
+    @NotBlank(message = "issbn isn't only whitespace")
     private String issbn;
 
+    @NotNull(message = "title is must required")
+    @NotBlank(message = "title isn't only whitespace")
     private String title;
 
+    @NotNull(message = "number of page is must required")
     private Integer numberOfPage;
     
     private String description;
@@ -20,6 +26,8 @@ public class BookUpdateReqDto {
     private String publisher;
 
     private String authorName;
+
+    private LocalDate releaseDate;
 
     public String getTitle() {
         return title;
@@ -75,6 +83,14 @@ public class BookUpdateReqDto {
 
     public void setIssbn(String issbn) {
         this.issbn = issbn;
+    }
+
+    public LocalDate getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(LocalDate releaseDate) {
+        this.releaseDate = releaseDate;
     }
 
     
