@@ -55,18 +55,20 @@ public class BookTypeService {
     public BaseInsertResDto save(BookTypeInsertReqDto bookTypeReqDto){
         BaseInsertResDto baseInsertResDto = new BaseInsertResDto();
 
-        BookType bookType = new BookType();
+
+        String bookTypeCode = bookTypeReqDto.getBookTypeCode();
 
         // check duplicate data
-        if(!bookTypeDao.isExistByBookTypeCode(bookTypeReqDto.getBookTypeCode())){
+        if(!bookTypeDao.isExistByBookTypeCode(bookTypeCode)){
             BeanPropertyBindingResult bindingResult =
                 new BeanPropertyBindingResult(bookTypeReqDto, "bookTypeReqDto");
             bindingResult.rejectValue("bookTypeCode", "duplicate", "Book type code already exists");
 
             throw new ValidationRuntimeException(bindingResult);
         }
-        
-        bookType.setBookTypeCode(bookTypeReqDto.getBookTypeCode());
+
+        BookType bookType = new BookType();
+        bookType.setBookTypeCode(bookTypeCode);
         bookType.setBookTypeName(bookTypeReqDto.getBookTypeName());
 
         BookType bookTypeInsert = bookTypeDao.save(bookType);
@@ -131,16 +133,18 @@ public class BookTypeService {
     public BaseUpdateAndDeleteResDto delete(BookTypeDeleteReqDto bookTypeDeleteReqDto){
         BaseUpdateAndDeleteResDto baseUpdateResDto = new BaseUpdateAndDeleteResDto();
 
+        String bookTypeCode = bookTypeDeleteReqDto.getBookTypeCode();
+
         // check data type isn't available
-        if(!bookTypeDao.isExistByBookTypeCode(bookTypeDeleteReqDto.getBookTypeCode()))
+        if(!bookTypeDao.isExistByBookTypeCode(bookTypeCode))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Book type isn't available");
         
         // check book
-        if(bookTypeDao.isExistOfBookTypeFK(bookTypeDeleteReqDto.getBookTypeCode()))
+        if(bookTypeDao.isExistOfBookTypeFK(bookTypeCode))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Book type still available on book");
 
         // delete book type
-        Boolean isDelete = bookTypeDao.delete(BookType.class, "book_type_code", bookTypeDeleteReqDto.getBookTypeCode());
+        Boolean isDelete = bookTypeDao.delete(BookType.class, "book_type_code", bookTypeCode);
         
         if(isDelete){
             baseUpdateResDto.setMessage(Message.SUCCESS_DELETE.getMessage());
