@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
         );
 
         res.setErrors(errors);
-        res.setMessage(ex.getMessage());
+        res.setMessage("Field validation");
 
         return ResponseEntity.badRequest().body(res);
     }
@@ -51,7 +51,7 @@ public class GlobalExceptionHandler {
             errors.put(error.getField(), error.getDefaultMessage())
         );
         res.setErrors(errors);
-        res.setMessage(ex.getMessage());
+        res.setMessage("Field validation");
         return ResponseEntity.badRequest().body(res);
     }
 
