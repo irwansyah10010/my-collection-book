@@ -1,13 +1,14 @@
 PUT http://localhost:8080/mbc/books/
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyYyI6InNlIiwiZXhwIjoxNzU1MTc1MzAxLCJ1c2VybmFtZSI6Imlyd2FuLmRldiJ9.J5keDQNEiDBtEes6FNRim3YHqfgCqLneiQUrafcY150
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyYyI6InNlIiwiZXhwIjoxNzU1NDI2MjU2LCJ1c2VybmFtZSI6Imlyd2FuLmRldiJ9.96JkIJwCVlulGWsuuaE9Yuq0OjLnQvzAtQUytmITFHs
 
 {
-    "issbn":"ISB12236",
-    "title":"Spiderman 5",
-    //"numberOfPage":"700",
-    "description":"Build Human to be spiderman"
-    // "price":20.0,
-    // "publisher":"No",
-    // "authorName":"Now",
+    "issbn": "ISB181296",
+    "title": "Filosofi Teras",
+    "numberOfPage": 500,
+    "authorName": "Now",
+    "publisher": "No",
+    "releaseDate": "2010-01-01",
+    "description":"Build Human Habit for someday",
+    "price":20.0
 }

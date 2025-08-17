@@ -1,18 +1,21 @@
 POST http://localhost:8080/mbc/books/
 content-type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyYyI6InNlIiwiZXhwIjoxNzU1MTcxNDQ0LCJ1c2VybmFtZSI6Imlyd2FuLmRldiJ9.4hA0wpMBlptVlveDaIbZR5MQo-8T3yIrpECT1C5mB8c
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyYyI6InNlIiwiZXhwIjoxNzU1NDE2NDI2LCJ1c2VybmFtZSI6Imlyd2FuLmRldiJ9.C23xBDml1Qe-6BpvAyvMH1VHalYvLhMrphZJMbZX22k
 
 {
-    "issbn":"ISB12236",
-    "title":"Atomic Habits 5",
-    "numberOfPage":"700",
+    "issbn":"ISB181298",
+    "title":"Filosofi Teras Cetakan 3",
+    "numberOfPage":500,
     "description":"Build Human Habit for someday",
     "price":20.0,
     "publisher":"No",
     "authorName":"Now",
     "bookTypes":[
         {
-            "bookTypeCode":"ADV"
+            "bookTypeCode":""
+        },
+        {
+            "bookTypeCode":"AV"
         }
     ] 
 }
