@@ -121,8 +121,8 @@ public class BookDao extends BaseDao{
                 .append("INNER JOIN tb_book_type tbt ON tbt.book_type_code = tbd.book_type_code ")
             .append(") tbc GROUP BY issbn ")
         .append(") tbcg ON tb.issbn = tbcg.issbn ")
-        .append("WHERE issbn like :search||'%' ")
-        .append("OR title like :search||'%' ")
+        .append("WHERE issbn like CONCAT(:search,'%') ")
+        .append("OR title like CONCAT(:search,'%') ")
         .append("LIMIT :data OFFSET :offset ");
 
         List<Map<String, Object>> result = new LinkedList<>();
