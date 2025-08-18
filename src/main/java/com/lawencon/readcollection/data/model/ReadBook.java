@@ -1,7 +1,5 @@
 package com.lawencon.readcollection.data.model;
 
-import java.time.LocalDateTime;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,11 +24,14 @@ public class ReadBook {
     private Integer pageOfRead;
 
     @Column(name = "date_of_read",nullable = false)
-    private LocalDateTime dateOfRead;
+    private Long dateOfRead;
 
     @ManyToOne
-    @JoinColumn(name = "book_id",columnDefinition = "VARCHAR(36)")
+    @JoinColumn(name = "issbn",columnDefinition = "VARCHAR(15)")
     private Book book;
+
+    @Column(name = "note")
+    private String note;
 
     public String getId() {
         return id;
@@ -56,12 +57,21 @@ public class ReadBook {
         this.book = book;
     }
 
-    public LocalDateTime getDateOfRead() {
+    public Long getDateOfRead() {
         return dateOfRead;
     }
 
-    public void setDateOfRead(LocalDateTime dateOfRead) {
+    public void setDateOfRead(Long dateOfRead) {
         this.dateOfRead = dateOfRead;
     }
 
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
+
+    
 }
