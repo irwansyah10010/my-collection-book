@@ -1,0 +1,10 @@
+POST http://localhost:8080/mbc/read-books/
+content-type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJyYyI6InNlIiwiZXhwIjoxNzU1NTMzMDcwLCJ1c2VybmFtZSI6Imlyd2FuLmRldiJ9.6PU4WEEQYeINP4WTcjqaXzwAhwG-NJmK7P-YgNk9W84
+
+{
+    "pageOfRead":16,
+    "issbn":"ISB12234",
+    "isReread":true,
+    "note":"iam"
+}
