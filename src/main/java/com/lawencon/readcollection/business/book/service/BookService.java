@@ -136,7 +136,7 @@ public class BookService {
         if(bookDao.isExistBook(issbn)){
             BeanPropertyBindingResult bindingResult =
                 new BeanPropertyBindingResult(bookInsertReqDto, "bookInsertReqDto");
-            bindingResult.rejectValue("issbn", "duplicate", "Issbn already exists");
+            bindingResult.rejectValue("issbn", "duplicate", "Book already exists");
 
             throw new ValidationRuntimeException(bindingResult);
         }
@@ -235,9 +235,9 @@ public class BookService {
         BeanPropertyBindingResult bindingResult =
                 new BeanPropertyBindingResult(bookTypeInsertReqDto, "bookTypeInsertReqDto");
 
-        // check issbn is not exist
+        // check duplicate data
         if(!bookDao.isExistBook(issbn))
-            bindingResult.rejectValue("issbn", "empty", "Issbn isn't available");
+            bindingResult.rejectValue("issbn", "empty", "Book isn't available");
         
 
         // check book type code is not exist

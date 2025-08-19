@@ -91,7 +91,7 @@ public class BookDao extends BaseDao{
                 
                 Map<String, Object> map = new LinkedHashMap<>();
                 map.put("issbn", o[0]);
-                map.put("bookName", o[1]);
+                map.put("title", o[1]);
                 map.put("statusName", o[2]);
                 map.put("category", o[3]);
                 map.put("page", o[4]);
@@ -137,7 +137,7 @@ public class BookDao extends BaseDao{
                 
                 Map<String, Object> map = new LinkedHashMap<>();
                 map.put("issbn", o[0]);
-                map.put("bookName", o[1]);
+                map.put("title", o[1]);
                 map.put("statusName", o[2]);
                 map.put("category", o[3]);
                 map.put("page", o[4]);
