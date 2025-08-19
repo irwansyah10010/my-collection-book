@@ -8,6 +8,8 @@ import java.util.Map;
 import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
+
+import com.lawencon.readcollection.data.model.Book;
 import com.lawencon.readcollection.data.model.ReadBook;
 
 @Repository
@@ -136,6 +138,24 @@ public class ReadBookDao extends BaseDao{
         return result;
     }
     
+    public Integer countOfReadBook(String search, String status){
+        Map<String, Object> filter = new LinkedHashMap<>();
+
+        StringBuilder conditionSql = new StringBuilder();
+
+        if(!search.isEmpty()){
+            conditionSql.append("AND (title LIKE CONCAT(:search,'%') ").append("OR issbn LIKE CONCAT(:search,'%')) ");
+            filter.put("search", search);
+        }
+
+        if (!status.isEmpty()){
+            conditionSql.append("AND status_code = :status ");
+            filter.put("status", status);
+        }
+
+        return count(Book.class, conditionSql.toString(), filter);
+    }
+
     public List<Map<String, Object>> findAllByIssbn(String issbn, Integer page, Integer data){
         StringBuilder sql = new StringBuilder();
         sql.append("SELECT tb.issbn, tb.title, trb.date_of_read, trb.page_of_read, trb.note ")
@@ -207,4 +227,6 @@ public class ReadBookDao extends BaseDao{
     public boolean isExistReadBook(String issbn){
         return count(ReadBook.class, Map.of("issbn", issbn)) > 0;
     }
+
+
 }

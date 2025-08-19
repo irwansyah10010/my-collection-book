@@ -74,7 +74,7 @@ public class ReadBookService {
 
         BaseResListDto<Map<String,Object>> baseResListDto = new BaseResListDto<>();
         baseResListDto.setData(all);
-        baseResListDto.setCountOfData(bookDao.count(Book.class));
+        baseResListDto.setCountOfData(readBookDao.countOfReadBook(search, status));
         baseResListDto.setLimit(limit);
         baseResListDto.setPage(page);
 
@@ -93,7 +93,7 @@ public class ReadBookService {
 
         BaseResListDto<Map<String,Object>> baseResListDto = new BaseResListDto<>();
         baseResListDto.setData(all);
-        baseResListDto.setCountOfData(bookDao.count(Book.class));
+        baseResListDto.setCountOfData(readBookDao.count(ReadBook.class, Map.of("issbn", issbn)));
         baseResListDto.setLimit(limit);
         baseResListDto.setPage(page);
 
