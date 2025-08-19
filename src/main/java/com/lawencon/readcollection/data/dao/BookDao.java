@@ -76,15 +76,14 @@ public class BookDao extends BaseDao{
                 .append("RIGHT JOIN tb_book_type_book tbd ON tb.issbn = tbd.issbn ")
                 .append("INNER JOIN tb_book_type tbt ON tbt.book_type_code = tbd.book_type_code ")
             .append(") tbc GROUP BY issbn ")
-        .append(") tbcg ON tb.issbn = tbcg.issbn ")
-        .append("LIMIT :data OFFSET :offset ");
+        .append(") tbcg ON tb.issbn = tbcg.issbn ");
 
         List<Map<String, Object>> result = new LinkedList<>();
         try {
             List<?> resultList = getEM()
                 .createNativeQuery(sql.toString())
-                .setParameter("data", data)
-                .setParameter("offset", (page - 1) * data)
+                .setFirstResult((page - 1) * data)   // offset
+                .setMaxResults(data)  
                 .getResultList();
 
             for (Object obj : resultList) {
@@ -122,16 +121,15 @@ public class BookDao extends BaseDao{
             .append(") tbc GROUP BY issbn ")
         .append(") tbcg ON tb.issbn = tbcg.issbn ")
         .append("WHERE issbn like CONCAT(:search,'%') ")
-        .append("OR title like CONCAT(:search,'%') ")
-        .append("LIMIT :data OFFSET :offset ");
+        .append("OR title like CONCAT(:search,'%') ");
 
         List<Map<String, Object>> result = new LinkedList<>();
         try {
             List<?> resultList = getEM()
                 .createNativeQuery(sql.toString())
-                .setParameter("data", data)
-                .setParameter("offset", (page - 1) * data)
                 .setParameter("search", search)
+                .setFirstResult((page - 1) * data)   // offset
+                .setMaxResults(data)
                 .getResultList();
 
             for (Object obj : resultList) {

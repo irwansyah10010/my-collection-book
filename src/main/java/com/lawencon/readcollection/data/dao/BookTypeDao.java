@@ -12,6 +12,7 @@ import com.lawencon.readcollection.data.model.BookTypeBook;
 @Repository
 public class BookTypeDao extends BaseDao{
 
+    @SuppressWarnings("unchecked")
     public List<BookType> findAll(){
         String sql = "SELECT * FROM tb_book_type";
 

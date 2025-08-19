@@ -34,15 +34,14 @@ public class ReadBookDao extends BaseDao{
                 .append("RIGHT JOIN tb_book_type_book tbd ON tb.issbn = tbd.issbn ")
                 .append("INNER JOIN tb_book_type tbt ON tbt.book_type_code = tbd.book_type_code ")
             .append(") tbg GROUP BY issbn ")
-        .append(") tbc ON tb.issbn = tbc.issbn ")
-        .append("LIMIT :data OFFSET :offset ");
+        .append(") tbc ON tb.issbn = tbc.issbn ");
 
         List<Map<String, Object>> result = new LinkedList<>();
         try {
             List<?> resultList = getEM()
                 .createNativeQuery(sql.toString())
-                .setParameter("data", data)
-                .setParameter("offset", (page - 1) * data)
+                .setFirstResult((page - 1) * data)   // offset
+                .setMaxResults(data)
                 .getResultList();
 
             for (Object obj : resultList) {
@@ -98,15 +97,14 @@ public class ReadBookDao extends BaseDao{
             .append(") tbg GROUP BY issbn ")
         .append(") tbc ON tb.issbn = tbc.issbn ")
         .append("WHERE 1=1 ")
-        .append(conditionSql.toString())
-        .append("LIMIT :data OFFSET :offset ");
+        .append(conditionSql.toString());
         
         List<Map<String, Object>> result = new LinkedList<>();
         try {
             Query setParameter = getEM()
                             .createNativeQuery(sql.toString())
-                            .setParameter("data", data)
-                            .setParameter("offset", (page - 1) * data);
+                            .setFirstResult((page - 1) * data)   // offset
+                            .setMaxResults(data);
 
             if(!search.isEmpty())
                 setParameter.setParameter("search", search);
@@ -144,16 +142,15 @@ public class ReadBookDao extends BaseDao{
         .append("FROM tb_book tb ")
         .append("LEFT JOIN tb_read_book trb ON tb.issbn = trb.issbn ")
         .append("WHERE tb.issbn = :issbn ")
-        .append("ORDER BY trb.date_of_read ")
-        .append("LIMIT :data OFFSET :offset ");
+        .append("ORDER BY trb.date_of_read ");
 
         List<Map<String, Object>> result = new LinkedList<>();
         try {
             List<?> resultList = getEM()
                 .createNativeQuery(sql.toString())
                 .setParameter("issbn", issbn)
-                .setParameter("data", data)
-                .setParameter("offset", (page - 1) * data)
+                .setFirstResult((page - 1) * data)   // offset
+                .setMaxResults(data)
                 .getResultList();
 
             for (Object obj : resultList) {
