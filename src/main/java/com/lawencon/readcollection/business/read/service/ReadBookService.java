@@ -14,7 +14,7 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.lawencon.readcollection.base.constant.Message;
-import com.lawencon.readcollection.base.dto.res.BaseInsertResDto;
+import com.lawencon.readcollection.base.dto.res.BaseTransactionResDto;
 import com.lawencon.readcollection.base.dto.res.BaseResListDto;
 import com.lawencon.readcollection.base.dto.validation.ValidationRuntimeException;
 import com.lawencon.readcollection.business.read.dto.ReadBookInsertReqDto;
@@ -120,8 +120,8 @@ public class ReadBookService {
      * @return
      */
     @Transactional(rollbackOn = Exception.class)
-    public BaseInsertResDto readingByPage(ReadBookInsertReqDto readBookInsertReqDto){
-        BaseInsertResDto baseInsertResDto = new BaseInsertResDto();
+    public BaseTransactionResDto readingByPage(ReadBookInsertReqDto readBookInsertReqDto){
+        BaseTransactionResDto baseInsertResDto = new BaseTransactionResDto();
 
         String issbn = readBookInsertReqDto.getIssbn();
         Integer pageOfRead = readBookInsertReqDto.getPageOfRead();
@@ -140,6 +140,7 @@ public class ReadBookService {
 
         Book book = bookDao.findByPK(Book.class, issbn);
         String statusCodeBook = book.getStatus().getStatusCode();
+        Integer numberOfPageBook = book.getNumberOfPage();
 
         /*  no re read book validation */
         if(!isReread){
@@ -149,22 +150,19 @@ public class ReadBookService {
 
         }else{
             statusCodeBook = "R";
-            Status status = statusDao.findByPK(Status.class, statusCodeBook);
-            book.setStatus(status);
+            book.setStatus(statusDao.findByPK(Status.class, statusCodeBook));
         }
         
         /*  global validation */
         // if page equal to number of page
-        if(pageOfRead.equals(book.getNumberOfPage())){
-            Status status = statusDao.findByPK(Status.class, "C"); // note
-            book.setStatus(status);
-        }
+        if(pageOfRead.equals(numberOfPageBook))
+            book.setStatus(statusDao.findByPK(Status.class, "C"));
+        
         
         // read book isnt exist
-        if(!readBookDao.isExistReadBook(issbn)){
-            Status status = statusDao.findByPK(Status.class, "R"); // note
-            book.setStatus(status);
-        }
+        if(!readBookDao.isExistReadBook(issbn))
+            book.setStatus(statusDao.findByPK(Status.class, "R"));
+        
 
         // check data read book and status book not match (data > 0 == ! 'R' || data = 0 ==  ! 'N' ) // note
         if(readBookDao.isExistReadBook(issbn) && !statusCodeBook.equals("R") ||
@@ -172,13 +170,12 @@ public class ReadBookService {
                 throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Status code and data read book isn't match");
 
         // validation page 
-        if(pageOfRead > book.getNumberOfPage() && pageOfRead < 0)
+        if(pageOfRead > numberOfPageBook && pageOfRead < 0)
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Page of read out of reach");
         
 
         // check if last data is same
         Map<String,Object> lastByIssbn = readBookDao.findLastByIssbn(issbn);
-        
         if(pageOfRead.equals(lastByIssbn.get("pageOfRead")))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "page of read isn't change");
 
@@ -186,11 +183,7 @@ public class ReadBookService {
         readBook.setPageOfRead(pageOfRead);
         readBook.setDateOfRead(System.currentTimeMillis());
         readBook.setBook(book);
-
-        if(note != null)
-            readBook.setNote(note);
-        else
-            readBook.setNote("No comment");
+        readBook.setNote(note != null?note:"No comment");
 
         ReadBook readBookInsert = readBookDao.save(readBook);
 

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.lawencon.readcollection.base.dto.res.BaseInsertResDto;
+import com.lawencon.readcollection.base.dto.res.BaseTransactionResDto;
 import com.lawencon.readcollection.base.dto.validation.ValidationRuntimeException;
 
 @RestControllerAdvice
@@ -19,8 +19,8 @@ public class GlobalExceptionHandler {
     
     // technical error
     @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<BaseInsertResDto> handleRuntimeException(RuntimeException ex) {
-        BaseInsertResDto res = new BaseInsertResDto();
+    public ResponseEntity<BaseTransactionResDto> handleRuntimeException(RuntimeException ex) {
+        BaseTransactionResDto res = new BaseTransactionResDto();
         ex.printStackTrace();
         res.setMessage("Technical Error"); // pesan dari service
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(res);
@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
     // validation via annotation
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidationException(MethodArgumentNotValidException ex) {
-        BaseInsertResDto res = new BaseInsertResDto();
+        BaseTransactionResDto res = new BaseTransactionResDto();
 
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(error -> 
@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
     // validation via service
     @ExceptionHandler(ValidationRuntimeException.class)
     public ResponseEntity<?> handleBindException(ValidationRuntimeException ex) {
-        BaseInsertResDto res = new BaseInsertResDto();
+        BaseTransactionResDto res = new BaseTransactionResDto();
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(error ->
             errors.put(error.getField(), error.getDefaultMessage())
@@ -58,7 +58,7 @@ public class GlobalExceptionHandler {
     // about data
     @ExceptionHandler(ResponseStatusException.class)
     public ResponseEntity<?> handleBindException(ResponseStatusException ex) {
-        BaseInsertResDto res = new BaseInsertResDto();
+        BaseTransactionResDto res = new BaseTransactionResDto();
         res.setMessage(ex.getReason());
         return ResponseEntity.status(ex.getStatus()).body(res);
     }

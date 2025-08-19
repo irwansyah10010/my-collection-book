@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lawencon.readcollection.base.dto.res.BaseInsertResDto;
+import com.lawencon.readcollection.base.dto.res.BaseTransactionResDto;
 import com.lawencon.readcollection.base.dto.res.BaseResListDto;
-import com.lawencon.readcollection.base.dto.res.BaseUpdateAndDeleteResDto;
+import com.lawencon.readcollection.base.dto.res.BaseTransactionResDto;
 import com.lawencon.readcollection.business.booktype.dto.BookTypeDeleteReqDto;
 import com.lawencon.readcollection.business.booktype.dto.BookTypeInsertReqDto;
 import com.lawencon.readcollection.business.booktype.dto.BookTypeUpdateReqDto;
@@ -39,25 +39,25 @@ public class BookTypeController {
     }
 
     @PostMapping
-    public ResponseEntity<BaseInsertResDto> save(@Valid @RequestBody BookTypeInsertReqDto bookTypeInsertReqDto){
-        BaseInsertResDto baseInsertResDto = bookTypeService.save(bookTypeInsertReqDto);
+    public ResponseEntity<BaseTransactionResDto> save(@Valid @RequestBody BookTypeInsertReqDto bookTypeInsertReqDto){
+        BaseTransactionResDto baseInsertResDto = bookTypeService.save(bookTypeInsertReqDto);
 
         return new ResponseEntity<>(baseInsertResDto, HttpStatus.CREATED);
     }
 
 
     @PutMapping
-    public ResponseEntity<BaseUpdateAndDeleteResDto> update(@Valid @RequestBody BookTypeUpdateReqDto bookTypeUpdateReqDto){
-        BaseUpdateAndDeleteResDto baseUpdateResDto = bookTypeService.update(bookTypeUpdateReqDto);
+    public ResponseEntity<BaseTransactionResDto> update(@Valid @RequestBody BookTypeUpdateReqDto bookTypeUpdateReqDto){
+        BaseTransactionResDto baseUpdateResDto = bookTypeService.update(bookTypeUpdateReqDto);
 
         return new ResponseEntity<>(baseUpdateResDto, HttpStatus.OK);
     }
 
     @DeleteMapping
-    public ResponseEntity<BaseUpdateAndDeleteResDto> delete(@RequestBody BookTypeDeleteReqDto bookTypeDeleteReqDto){
-        BaseUpdateAndDeleteResDto baseUpdateAndDeleteResDto = bookTypeService.delete(bookTypeDeleteReqDto);
+    public ResponseEntity<BaseTransactionResDto> delete(@RequestBody BookTypeDeleteReqDto bookTypeDeleteReqDto){
+        BaseTransactionResDto BaseTransactionResDto = bookTypeService.delete(bookTypeDeleteReqDto);
 
-        return new ResponseEntity<>(baseUpdateAndDeleteResDto, HttpStatus.OK);
+        return new ResponseEntity<>(BaseTransactionResDto, HttpStatus.OK);
     }
 
 }

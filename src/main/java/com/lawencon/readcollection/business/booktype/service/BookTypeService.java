@@ -9,9 +9,9 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.lawencon.readcollection.base.constant.Message;
-import com.lawencon.readcollection.base.dto.res.BaseInsertResDto;
+import com.lawencon.readcollection.base.dto.res.BaseTransactionResDto;
 import com.lawencon.readcollection.base.dto.res.BaseResListDto;
-import com.lawencon.readcollection.base.dto.res.BaseUpdateAndDeleteResDto;
+import com.lawencon.readcollection.base.dto.res.BaseTransactionResDto;
 import com.lawencon.readcollection.base.dto.validation.ValidationRuntimeException;
 import com.lawencon.readcollection.business.booktype.dto.BookTypeDeleteReqDto;
 import com.lawencon.readcollection.business.booktype.dto.BookTypeInsertReqDto;
@@ -52,8 +52,8 @@ public class BookTypeService {
      * @return
      */
     @Transactional(rollbackOn = Exception.class)
-    public BaseInsertResDto save(BookTypeInsertReqDto bookTypeReqDto){
-        BaseInsertResDto baseInsertResDto = new BaseInsertResDto();
+    public BaseTransactionResDto save(BookTypeInsertReqDto bookTypeReqDto){
+        BaseTransactionResDto baseInsertResDto = new BaseTransactionResDto();
 
 
         String bookTypeCode = bookTypeReqDto.getBookTypeCode();
@@ -99,8 +99,8 @@ public class BookTypeService {
      * @return
      */
     @Transactional(rollbackOn = Exception.class)
-    public BaseUpdateAndDeleteResDto update(BookTypeUpdateReqDto bookTypeUpdateReqDto){
-        BaseUpdateAndDeleteResDto baseUpdateResDto = new BaseUpdateAndDeleteResDto();
+    public BaseTransactionResDto update(BookTypeUpdateReqDto bookTypeUpdateReqDto){
+        BaseTransactionResDto baseUpdateResDto = new BaseTransactionResDto();
 
         if(bookTypeDao.isChangeByAllRequest(bookTypeUpdateReqDto.getBookTypeCode(), bookTypeUpdateReqDto.getBookTypeName()))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request book type isn't change");
@@ -130,8 +130,8 @@ public class BookTypeService {
      * @return
      */
     @Transactional(rollbackOn = Exception.class)
-    public BaseUpdateAndDeleteResDto delete(BookTypeDeleteReqDto bookTypeDeleteReqDto){
-        BaseUpdateAndDeleteResDto baseUpdateResDto = new BaseUpdateAndDeleteResDto();
+    public BaseTransactionResDto delete(BookTypeDeleteReqDto bookTypeDeleteReqDto){
+        BaseTransactionResDto baseUpdateResDto = new BaseTransactionResDto();
 
         String bookTypeCode = bookTypeDeleteReqDto.getBookTypeCode();
 

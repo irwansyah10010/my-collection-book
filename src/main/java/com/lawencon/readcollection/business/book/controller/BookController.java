@@ -15,13 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lawencon.readcollection.base.dto.res.BaseInsertResDto;
+import com.lawencon.readcollection.base.dto.res.BaseTransactionResDto;
 import com.lawencon.readcollection.base.dto.res.BaseResListDto;
 import com.lawencon.readcollection.base.dto.res.BaseResSingleDto;
-import com.lawencon.readcollection.base.dto.res.BaseUpdateAndDeleteResDto;
 import com.lawencon.readcollection.business.book.dto.BookDeleteReqDto;
 import com.lawencon.readcollection.business.book.dto.BookInsertReqDto;
-import com.lawencon.readcollection.business.book.dto.BookSingleResDto;
 import com.lawencon.readcollection.business.book.dto.BookTypeInsertReqDto;
 import com.lawencon.readcollection.business.book.dto.BookUpdateReqDto;
 import com.lawencon.readcollection.business.book.dto.BookUpdateStatusReqDto;
@@ -55,38 +53,38 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity<BaseInsertResDto> add(@Valid @RequestBody BookInsertReqDto bookInsertReqDto){
+    public ResponseEntity<BaseTransactionResDto> add(@Valid @RequestBody BookInsertReqDto bookInsertReqDto){
 
-        BaseInsertResDto baseInsertResDto = bookService.add(bookInsertReqDto);
+        BaseTransactionResDto baseInsertResDto = bookService.add(bookInsertReqDto);
 
         return new ResponseEntity<>(baseInsertResDto, HttpStatus.CREATED);
     }
 
     @PostMapping("/add-book-type")
-    public ResponseEntity<BaseInsertResDto> addBookType(@Valid @RequestBody BookTypeInsertReqDto bookInsertReqDto){
+    public ResponseEntity<BaseTransactionResDto> addBookType(@Valid @RequestBody BookTypeInsertReqDto bookInsertReqDto){
 
-        BaseInsertResDto baseInsertResDto = bookService.addBookType(bookInsertReqDto);
+        BaseTransactionResDto baseInsertResDto = bookService.addBookType(bookInsertReqDto);
 
         return new ResponseEntity<>(baseInsertResDto, HttpStatus.CREATED);
     }
 
     @PutMapping
-    public ResponseEntity<BaseUpdateAndDeleteResDto> update(@Valid @RequestBody BookUpdateReqDto bookUpdateReqDto){
-        BaseUpdateAndDeleteResDto baseUpdateResDto = bookService.update(bookUpdateReqDto);
+    public ResponseEntity<BaseTransactionResDto> update(@Valid @RequestBody BookUpdateReqDto bookUpdateReqDto){
+        BaseTransactionResDto baseUpdateResDto = bookService.update(bookUpdateReqDto);
 
         return new ResponseEntity<>(baseUpdateResDto, HttpStatus.OK);
     }
 
     @PutMapping("/update-status")
-    public ResponseEntity<BaseUpdateAndDeleteResDto> updateStatus(@Valid @RequestBody BookUpdateStatusReqDto bookUpdateStatusReqDto){
-        BaseUpdateAndDeleteResDto baseUpdateResDto = bookService.updateStatus(bookUpdateStatusReqDto);
+    public ResponseEntity<BaseTransactionResDto> updateStatus(@Valid @RequestBody BookUpdateStatusReqDto bookUpdateStatusReqDto){
+        BaseTransactionResDto baseUpdateResDto = bookService.updateStatus(bookUpdateStatusReqDto);
 
         return new ResponseEntity<>(baseUpdateResDto, HttpStatus.OK);
     }
 
     @DeleteMapping
-    public ResponseEntity<BaseUpdateAndDeleteResDto> delete(@RequestBody BookDeleteReqDto bookDeleteReqDto){
-        BaseUpdateAndDeleteResDto baseDeleteResDto = bookService.delete(bookDeleteReqDto);
+    public ResponseEntity<BaseTransactionResDto> delete(@RequestBody BookDeleteReqDto bookDeleteReqDto){
+        BaseTransactionResDto baseDeleteResDto = bookService.delete(bookDeleteReqDto);
 
         return new ResponseEntity<>(baseDeleteResDto, HttpStatus.OK);
     }

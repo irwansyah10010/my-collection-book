@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lawencon.readcollection.base.dto.res.BaseInsertResDto;
+import com.lawencon.readcollection.base.dto.res.BaseTransactionResDto;
 import com.lawencon.readcollection.base.dto.res.BaseResListDto;
 import com.lawencon.readcollection.business.read.dto.ReadBookInsertReqDto;
 import com.lawencon.readcollection.business.read.service.ReadBookService;
@@ -48,8 +48,8 @@ public class ReadBookController {
     }
 
     @PostMapping
-    public ResponseEntity<BaseInsertResDto> save(@Valid @RequestBody ReadBookInsertReqDto readBookInsertReqDto){
-        BaseInsertResDto baseInsertResDto = readBookService.readingByPage(readBookInsertReqDto);
+    public ResponseEntity<BaseTransactionResDto> save(@Valid @RequestBody ReadBookInsertReqDto readBookInsertReqDto){
+        BaseTransactionResDto baseInsertResDto = readBookService.readingByPage(readBookInsertReqDto);
 
         return new ResponseEntity<>(baseInsertResDto, HttpStatus.CREATED);
     }

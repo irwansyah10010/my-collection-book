@@ -2,7 +2,7 @@ package com.lawencon.readcollection.base.dto.res;
 
 import java.util.Map;
 
-public class BaseInsertResDto {
+public class BaseTransactionResDto {
     private String id;
     private Map<String,String> errors;
     private String message;
