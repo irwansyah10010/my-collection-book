@@ -59,10 +59,10 @@ public class BookTypeService {
         String bookTypeCode = bookTypeReqDto.getBookTypeCode();
 
         // check duplicate data
-        if(!bookTypeDao.isExistByBookTypeCode(bookTypeCode)){
+        if(bookTypeDao.isExistByBookTypeCode(bookTypeCode)){
             BeanPropertyBindingResult bindingResult =
                 new BeanPropertyBindingResult(bookTypeReqDto, "bookTypeReqDto");
-            bindingResult.rejectValue("bookTypeCode", "duplicate", "Book type code already exists");
+            bindingResult.rejectValue("bookTypeCode", "duplicate", "Book type already exists");
 
             throw new ValidationRuntimeException(bindingResult);
         }
