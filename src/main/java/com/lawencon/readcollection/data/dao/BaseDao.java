@@ -191,4 +191,45 @@ public abstract class BaseDao {
         return countOfData;
     }
 
+
+    public Integer count(Class<?> clazz, String sqlCondition, Map<String, Object> where){
+        StringBuilder sql = new StringBuilder();
+
+        String name = "NONE";
+        if (clazz.isAnnotationPresent(Table.class)) {
+            Table table = clazz.getAnnotation(Table.class);
+            name = table.name();
+        }
+        
+        sql.append("SELECT count(*) FROM ")
+        .append(name)
+        .append(" WHERE 1=1 ")
+        .append(sqlCondition);
+
+        Integer countOfData = 0;
+
+        Object obj = null;
+
+        try {
+            Query nativeQuery = getEM()
+                            .createNativeQuery(sql.toString());
+
+            // set parameter
+            for (Entry<String, Object> w : where.entrySet()) {
+                nativeQuery.setParameter(w.getKey(), w.getValue());
+            }
+                
+            obj = nativeQuery.getSingleResult();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        if(obj != null){
+            countOfData = Integer.parseInt(obj.toString());
+        }
+
+        return countOfData;
+    }
+
 }
