@@ -14,10 +14,10 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.lawencon.readcollection.base.constant.Message;
-import com.lawencon.readcollection.base.dto.res.BaseInsertResDto;
+import com.lawencon.readcollection.base.dto.res.BaseTransactionResDto;
 import com.lawencon.readcollection.base.dto.res.BaseResListDto;
 import com.lawencon.readcollection.base.dto.res.BaseResSingleDto;
-import com.lawencon.readcollection.base.dto.res.BaseUpdateAndDeleteResDto;
+import com.lawencon.readcollection.base.dto.res.BaseTransactionResDto;
 import com.lawencon.readcollection.base.dto.validation.ValidationRuntimeException;
 import com.lawencon.readcollection.business.book.dto.BookDeleteReqDto;
 import com.lawencon.readcollection.business.book.dto.BookInsertReqDto;
@@ -28,6 +28,7 @@ import com.lawencon.readcollection.business.booktype.dto.BookTypeInsertBookReqDt
 import com.lawencon.readcollection.data.dao.BookDao;
 import com.lawencon.readcollection.data.dao.BookTypeBookDao;
 import com.lawencon.readcollection.data.dao.BookTypeDao;
+import com.lawencon.readcollection.data.dao.ReadBookDao;
 import com.lawencon.readcollection.data.dao.StatusDao;
 import com.lawencon.readcollection.data.model.Book;
 import com.lawencon.readcollection.data.model.BookType;
@@ -49,6 +50,9 @@ public class BookService {
 
     @Autowired
     private BookTypeBookDao bookTypeBookDao;
+
+    @Autowired
+    private ReadBookDao readBookDao;
     
     public BaseResListDto<Map<String, Object>> getAll(Integer page, Integer limit){
         List<Map<String,Object>> all = bookDao.findAll(page, limit);
@@ -124,8 +128,8 @@ public class BookService {
      * @return
      */
     @Transactional(rollbackOn = Exception.class)
-    public BaseInsertResDto add(BookInsertReqDto bookInsertReqDto){
-        BaseInsertResDto baseInsertResDto = new BaseInsertResDto();
+    public BaseTransactionResDto add(BookInsertReqDto bookInsertReqDto){
+        BaseTransactionResDto baseInsertResDto = new BaseTransactionResDto();
 
         String issbn = bookInsertReqDto.getIssbn();
         
@@ -222,8 +226,8 @@ public class BookService {
      * @return
      */
     @Transactional(rollbackOn = Exception.class)
-    public BaseInsertResDto addBookType(BookTypeInsertReqDto bookTypeInsertReqDto){
-        BaseInsertResDto baseInsertResDto = new BaseInsertResDto();
+    public BaseTransactionResDto addBookType(BookTypeInsertReqDto bookTypeInsertReqDto){
+        BaseTransactionResDto baseInsertResDto = new BaseTransactionResDto();
 
         String issbn = bookTypeInsertReqDto.getIssbn();
         String bookTypeCode = bookTypeInsertReqDto.getBookTypeCode();
@@ -289,8 +293,8 @@ public class BookService {
      * @return
      */
     @Transactional(rollbackOn = Exception.class)
-    public BaseUpdateAndDeleteResDto update(BookUpdateReqDto bookUpdateReqDto){
-        BaseUpdateAndDeleteResDto baseUpdateResDto = new BaseUpdateAndDeleteResDto();
+    public BaseTransactionResDto update(BookUpdateReqDto bookUpdateReqDto){
+        BaseTransactionResDto baseUpdateResDto = new BaseTransactionResDto();
 
         String issbn = bookUpdateReqDto.getIssbn();
         String title = bookUpdateReqDto.getTitle();
@@ -302,10 +306,8 @@ public class BookService {
         LocalDate releaseDate = bookUpdateReqDto.getReleaseDate();
 
         // check data isnt change
-        
         if(bookDao.isChangeByAllRequest(issbn, title, numberOfPage, description, price, publisher, authorName, releaseDate))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Request book isn't change");
-
 
         Book book = bookDao.findByUpdate(Book.class, issbn);
 
@@ -353,8 +355,8 @@ public class BookService {
      * @return
      */
     @Transactional(rollbackOn = Exception.class)
-    public BaseUpdateAndDeleteResDto updateStatus(BookUpdateStatusReqDto bookUpdateStatusReqDto){
-        BaseUpdateAndDeleteResDto baseUpdateResDto = new BaseUpdateAndDeleteResDto();
+    public BaseTransactionResDto updateStatus(BookUpdateStatusReqDto bookUpdateStatusReqDto){
+        BaseTransactionResDto baseUpdateResDto = new BaseTransactionResDto();
 
         String statusCode = bookUpdateStatusReqDto.getStatusCode();
 
@@ -390,7 +392,6 @@ public class BookService {
         return baseUpdateResDto;
     }
 
-    // min read and book type
     /**
      * 
      * validation - request forbidden (400)
@@ -400,14 +401,13 @@ public class BookService {
      * @return
      */
     @Transactional(rollbackOn = Exception.class)
-    public BaseUpdateAndDeleteResDto delete(BookDeleteReqDto bookDeleteReqDto){
-        BaseUpdateAndDeleteResDto baseDeleteResDto = new BaseUpdateAndDeleteResDto();
+    public BaseTransactionResDto delete(BookDeleteReqDto bookDeleteReqDto){
+        BaseTransactionResDto baseDeleteResDto = new BaseTransactionResDto();
 
         String issbn = bookDeleteReqDto.getIssbn();
 
-        // delete read_book by issbn
-        Boolean isDeleteReadBook = false;
-        if(isDeleteReadBook)
+        // check read_book
+        if(readBookDao.isExistReadBook(issbn))
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Book type still available on read");
 
         // check book isnt exist
