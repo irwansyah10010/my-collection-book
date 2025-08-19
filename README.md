@@ -8,14 +8,8 @@ My Collection Book adalah Backend yang digunakan sebagai media histori buku yang
 Untuk saat ini saya tidak menyediakan instruksi dalam menggunakan backend ini. Meskipun begitu, source kode ini terbuka untuk developer sebagai bahan belajar maupun pengembangan aplikasi.
 
 
-Salam hangat[^1]  
-Irwansyah[^2]  
-irwansyah.dev@gmail.com[^3]  
-https://irwansyah10010.github.io/my-profile/[^4]  
+Salam hangat,  
+**Irwansyah**  
 
----
-
-[^1]: Salam penutup.  
-[^2]: Penulis.  
-[^3]: Email kontak.  
-[^4]: Profil lengkap.
+📧 My contact: [irwansyah.dev@gmail.com](mailto:irwansyah.dev@gmail.com)  
+🌐 [My Profile](https://irwansyah10010.github.io/my-profile/)  
